@@ -6,11 +6,11 @@ import { isErrnoException, type TranslationsData } from './types.ts'
 /**
  * Finds translation files in the specified path.
  *
- * @param path - The path to search for translation files.
+ * @param searchPath - The path to search for translation files.
  * @returns - An array of translation file paths.
  */
-export const findTranslationFiles = (path: string): string[] => {
-  return globSync(['!**/node_modules/**', `${path}/**/translation.*.json`])
+export const findTranslationFiles = (searchPath: string): string[] => {
+  return globSync(['!**/node_modules/**', path.join(searchPath, '**/translation.*.json')])
 }
 
 /**
