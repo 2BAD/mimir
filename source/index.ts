@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import fs from 'fs'
 import path from 'path'
-import { findTranslationFiles, getAvailableLocales, getTranslationContent } from './fs.ts'
+import { findTranslationFiles, getAvailableLocales, getTranslationContent, resolveFilePath } from './fs.ts'
 import { containsApostrophes, containsHtmlTags, containsPlaceholders, containsPlural } from './rules.ts'
 import { type Translations } from './types.ts'
 
@@ -17,7 +17,10 @@ function findTranslationsFolder(searchKey: string, translationPaths: string[]): 
   return ''
 }
 
-export function getHardKeys(keys: string[], targetLocale: string): Translations {
+// this should be something like this:
+// export const validateTranslations = (translations: Translations, keys: string[], rules: string[]): ValidationErrors => {
+
+export function getHardKeys(searchPath: string, keys: string[], targetLocale: string): Translations {
   const result: Translations = {}
 
   const translationPaths = findTranslationFiles(searchPath)
@@ -25,11 +28,13 @@ export function getHardKeys(keys: string[], targetLocale: string): Translations 
   for (const key of keys) {
     const folderPath = findTranslationsFolder(key, translationPaths)
 
-    const targetTranslationContent = getTranslationContent(folderPath, targetLocale)
+    const translationFilePath = resolveFilePath(folderPath, targetLocale)
+    const targetTranslationContent = getTranslationContent(translationFilePath)
 
     const targetValue = targetTranslationContent[key]
     const availableLocales = getAvailableLocales(folderPath)
 
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (folderPath && targetValue) {
       if (
         containsPlural(key) ||
@@ -37,7 +42,8 @@ export function getHardKeys(keys: string[], targetLocale: string): Translations 
         containsApostrophes(targetValue) ||
         containsPlaceholders(targetValue)
       ) {
-        const targetTranslation = readFromFile(folderPath, targetLocale)
+        const targetTranslationFilePath = resolveFilePath(folderPath, targetLocale)
+        const targetTranslation = getTranslationContent(targetTranslationFilePath)
         result[key] = targetTranslation[key]
       }
 
@@ -61,7 +67,7 @@ export function getHardKeys(keys: string[], targetLocale: string): Translations 
 
 function putHardKeysIntoFile(data: Translations): void {
   const resultJSON = JSON.stringify(data, null, 2)
-  fs.writeFileSync(outputPath, resultJSON, 'utf8')
+  fs.writeFileSync('output.json', resultJSON, 'utf8')
 }
 
 const keys2: string[] = [
@@ -81,6 +87,8 @@ const keys2: string[] = [
 ]
 
 const targetLocale = 'pt_BR'
-const hardKeys = getHardKeys(keys2, targetLocale)
+const rootPath = '/Users/oleh.zhmaiev/dev/client'
+const hardKeys = getHardKeys(rootPath, keys2, targetLocale)
 
+// eslint-disable-next-line vitest/require-hook
 putHardKeysIntoFile(hardKeys)
