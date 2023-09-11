@@ -3,9 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { findTranslationFiles, getAvailableLocales, getTranslationContent } from './fs.ts'
 import { containsApostrophes, containsHtmlTags, containsPlaceholders, containsPlural } from './rules.ts'
-import { type TranslationsData } from './types.ts'
-
-const outputPath = 'output.json'
+import { type Translations } from './types.ts'
 
 function findTranslationsFolder(searchKey: string, translationPaths: string[]): string {
   for (const filePath of translationPaths) {
@@ -19,8 +17,8 @@ function findTranslationsFolder(searchKey: string, translationPaths: string[]): 
   return ''
 }
 
-export function getHardKeys(keys: string[], targetLocale: string): TranslationsData {
-  const result: TranslationsData = {}
+export function getHardKeys(keys: string[], targetLocale: string): Translations {
+  const result: Translations = {}
 
   const translationPaths = findTranslationFiles(searchPath)
 
@@ -61,7 +59,7 @@ export function getHardKeys(keys: string[], targetLocale: string): TranslationsD
   return result
 }
 
-function putHardKeysIntoFile(data: TranslationsData): void {
+function putHardKeysIntoFile(data: Translations): void {
   const resultJSON = JSON.stringify(data, null, 2)
   fs.writeFileSync(outputPath, resultJSON, 'utf8')
 }
