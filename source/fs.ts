@@ -1,6 +1,17 @@
+import { globSync } from 'fast-glob'
 import fs from 'node:fs'
 import path from 'node:path'
 import { isErrnoException, type TranslationsData } from './types.ts'
+
+/**
+ * Finds translation files in the specified path.
+ *
+ * @param path - The path to search for translation files.
+ * @returns - An array of translation file paths.
+ */
+export const findTranslationFiles = (path: string): string[] => {
+  return globSync(['!**/node_modules/**', `${path}/**/translation.*.json`])
+}
 
 /**
  * Resolves the path to the translations folder based on the provided path.

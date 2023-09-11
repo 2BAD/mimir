@@ -1,17 +1,11 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import fg from 'fast-glob'
 import fs from 'fs'
 import path from 'path'
-import { getAvailableLocales, readFromFile } from './fs.ts'
+import { findTranslationFiles, getAvailableLocales, readFromFile } from './fs.ts'
 import { containsApostrophes, containsHtmlTags, containsPlaceholders, containsPlural } from './rules.ts'
 import { type TranslationsData } from './types.ts'
 
 const outputPath = 'output.json'
-const rootPath = '/Users/oleh.zhmaiev/dev/client'
-
-function findTranslationsPath(locale: string): string[] {
-  return fg.globSync([`${rootPath}/**/translation.${locale}.json`, '!**/node_modules/**'])
-}
 
 function findTranslationsFolder(searchKey: string, translationPaths: string[]): string {
   for (const filePath of translationPaths) {
