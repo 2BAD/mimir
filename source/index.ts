@@ -3,6 +3,7 @@ import fg from 'fast-glob'
 import fs from 'fs'
 import path from 'path'
 import { getAvailableLocales, readFromFile } from './fs.ts'
+import { containsApostrophes, containsHtmlTags, containsPlaceholders, containsPlural } from './rules.ts'
 import { type TranslationsData } from './types.ts'
 
 const outputPath = 'output.json'
@@ -31,23 +32,6 @@ function getTranslationContent(locale: string, folderPath: string) {
 
 function getTranslationValue(translationContent: TranslationsData, key: string): string {
   return translationContent[key]
-}
-
-// CHECKS
-function containsHtmlTags(value: string): boolean {
-  return /<[^>]*>/i.test(value)
-}
-
-function containsApostrophes(value: string): boolean {
-  return /'/g.test(value)
-}
-
-function containsPlaceholders(value: string): boolean {
-  return /\{\{.*?\}\}/g.test(value)
-}
-
-function containsPlural(key: string): boolean {
-  return /plural/i.test(key)
 }
 
 // TODO Implement function 'isValueTheLongest"
