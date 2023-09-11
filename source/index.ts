@@ -20,10 +20,6 @@ function findTranslationsFolder(searchKey: string, translationPaths: string[]): 
   return ''
 }
 
-function getTranslationValue(translationContent: TranslationsData, key: string): string {
-  return translationContent[key]
-}
-
 export function getHardKeys(keys: string[], targetLocale: string): TranslationsData {
   const result: TranslationsData = {}
 
@@ -33,7 +29,8 @@ export function getHardKeys(keys: string[], targetLocale: string): TranslationsD
     const folderPath = findTranslationsFolder(key, translationPaths)
 
     const targetTranslationContent = getTranslationContent(folderPath, targetLocale)
-    const targetValue = getTranslationValue(targetTranslationContent, key)
+
+    const targetValue = targetTranslationContent[key]
     const availableLocales = getAvailableLocales(folderPath)
 
     if (folderPath && targetValue) {
