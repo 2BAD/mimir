@@ -28,12 +28,6 @@ function getTranslationValue(translationContent: TranslationsData, key: string):
   return translationContent[key]
 }
 
-// TODO Implement function 'isValueTheLongest"
-function isValueLonger(targetValue: string, value: string): boolean {
-  console.log(targetValue.length, 'VS', value.length)
-  return targetValue.length > value.length
-}
-
 export function getHardKeys(keys: string[], targetLocale: string): TranslationsData {
   const result: TranslationsData = {}
 
