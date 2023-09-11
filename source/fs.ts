@@ -42,13 +42,11 @@ export const resolveFilePath = (translationsPath: string, locale: string): strin
 /**
  * Reads translations from a file at the given file path.
  *
- * @param translationsPath - The path to the translations file.
- * @param locale - The locale of the translations.
+ * @param filePath - The path to the translations file.
  * @returns The translations data.
  */
-export const getTranslationContent = (translationsPath: string, locale: string): Translations => {
+export const getTranslationContent = (filePath: string): Translations => {
   let translations: Translations = {}
-  const filePath = resolveFilePath(translationsPath, locale)
 
   try {
     const content = fs.readFileSync(filePath, 'utf-8')
@@ -73,12 +71,11 @@ export const getTranslationContent = (translationsPath: string, locale: string):
 /**
  * Retrieves the available locales based on files in translations directory.
  *
- * @param translationsPath - The path to the translations directory.
+ * @param folderPath - The path to the translations directory.
  * @returns An array of available locales.
  */
-export const getAvailableLocales = (translationsPath: string): string[] => {
+export const getAvailableLocales = (folderPath: string): string[] => {
   let locales: string[] = []
-  const folderPath = resolveFolderPath(translationsPath)
 
   try {
     const files = fs.readdirSync(folderPath)
