@@ -12,7 +12,7 @@ export type LocaleTranslations = Record<Locale, Translations>
 
 export type Translator = {
   findLocaleByText: (text: string) => string | null
-  getText: (locale: string, key: string) => string | null
+  getText: (locale: Locale, key: string) => string | null
 }
 
 export type TranslationsCache = {

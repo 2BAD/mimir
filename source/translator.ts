@@ -1,21 +1,20 @@
-import { createCacheStorage } from './cache'
-import { getAvailableLocales } from './fs'
-import { type Translator } from './types'
+import { createCacheStorage } from './cache.ts'
+import { findTranslationFiles, getAvailableLocales } from './fs.ts'
+import { type Locale, type Translator } from './types.ts'
 
 /**
  * Initializes a translator object.
  *
- * @param translationsPath - The path to the translations directory.
+ * @param path - The path to the translations directory.
  * @param [locales] - The locales to use for translation. If not provided, the available locales will be retrieved from the translations folder content.
  * @returns The initialized Translator object.
  */
-export const initTranslator = (translationsPath: string, locales: string[] = []): Translator => {
+export const initTranslator = (path: string, locales: Locale[] = []): Translator => {
   if (locales.length === 0) {
-    // eslint-disable-next-line no-param-reassign
-    locales = getAvailableLocales(translationsPath)
+    locales = getAvailableLocales(path)
   }
 
-  const cacheStorage = createCacheStorage(translationsPath)
+  const cacheStorage = createCacheStorage(findTranslationFiles(path))
 
   return {
     /**
@@ -40,7 +39,7 @@ export const initTranslator = (translationsPath: string, locales: string[] = [])
      * @param key - The key of the translation.
      * @returns The translated text, or null if not found.
      */
-    getText: (locale: string, key: string): string | null => {
+    getText: (locale: Locale, key: string): string | null => {
       const translations = cacheStorage.get(locale)
       return translations?.[key] ?? null
     }

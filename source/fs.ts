@@ -1,7 +1,7 @@
 import { globSync } from 'fast-glob'
 import fs from 'node:fs'
 import path from 'node:path'
-import { isErrnoException, type Translations } from './types.ts'
+import { isErrnoException, type Locale, type Translations } from './types.ts'
 
 /**
  * Finds translation files in the specified path.
@@ -74,7 +74,7 @@ export const getTranslationContent = (filePath: string): Translations => {
  * @param folderPath - The path to the translations directory.
  * @returns An array of available locales.
  */
-export const getAvailableLocales = (folderPath: string): string[] => {
+export const getAvailableLocales = (folderPath: string): Locale[] => {
   let locales: string[] = []
 
   try {
