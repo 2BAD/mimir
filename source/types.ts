@@ -15,6 +15,11 @@ export type Translator = {
   getText: (locale: string, key: string) => string | null
 }
 
+export type TranslationsCache = {
+  get: (locale: string) => Translations | null
+  refresh: (locale: string) => void
+}
+
 export const isErrnoException = (error: unknown): error is NodeJS.ErrnoException => {
   const properties = ['errno', 'code', 'syscall', 'path', 'stack']
 
