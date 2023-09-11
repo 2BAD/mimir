@@ -1,3 +1,4 @@
+import { filterPathsByLocale } from 'utils.ts'
 import { getTranslationContent } from './fs.ts'
 import { type Locale, type LocaleTranslations, type Translations, type TranslationsCache } from './types.ts'
 
@@ -13,7 +14,9 @@ export const createCacheStorage = (translationsPath: string[]): TranslationsCach
    * @param locale
    */
   const refresh = (locale: Locale): void => {
-    cache[locale] = getTranslationContent(translationsPath, locale)
+    for (const path of filterPathsByLocale(translationsPath, locale)) {
+      cache[locale] = getTranslationContent(path)
+    }
   }
 
   /**
