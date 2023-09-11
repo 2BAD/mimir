@@ -9,8 +9,7 @@ const outputPath = 'output.json'
 
 function findTranslationsFolder(searchKey: string, translationPaths: string[]): string {
   for (const filePath of translationPaths) {
-    const fileContent = fs.readFileSync(filePath, 'utf8')
-    const translations: TranslationsData = JSON.parse(fileContent)
+    const translations = getTranslationContent(filePath)
     if (translations[searchKey] !== undefined) {
       const directoryPath = path.dirname(filePath)
       return directoryPath
