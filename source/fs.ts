@@ -4,13 +4,15 @@ import path from 'node:path'
 import { isErrnoException, type Locale, type Translations } from './types.ts'
 
 /**
- * Finds translation files in the specified path.
+ * Finds translation files based on a search path and optional locales.
  *
- * @param searchPath - The path to search for translation files.
- * @returns - An array of translation file paths.
+ * @param searchPath - The base directory to search in.
+ * @param [locales] - Optional array of locales to search for.
+ * @returns An array of found translation file paths.
  */
-export const findTranslationFiles = (searchPath: string): string[] => {
-  return globSync(['!**/node_modules/**', path.join(searchPath, '**/translation.*.json')])
+export const findTranslationFiles = (searchPath: string, locales?: Locale[]): string[] => {
+  const pattern = locales?.length !== 0 ? `{${locales?.join(',')}}` : '*'
+  return globSync(['!**/node_modules/**', path.join(searchPath, `**/translation.${pattern}.json`)])
 }
 
 /**

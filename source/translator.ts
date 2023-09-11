@@ -14,7 +14,8 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
     locales = getAvailableLocales(path)
   }
 
-  const cacheStorage = createCacheStorage(findTranslationFiles(path))
+  const translationFiles = findTranslationFiles(path, locales)
+  const cacheStorage = createCacheStorage(translationFiles)
 
   return {
     /**
