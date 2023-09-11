@@ -16,8 +16,8 @@ export type Translator = {
 }
 
 export type TranslationsCache = {
-  get: (locale: string) => Translations | null
-  refresh: (locale: string) => void
+  get: (locale: Locale) => Translations | null
+  refresh: (locale: Locale) => void
 }
 
 export const isErrnoException = (error: unknown): error is NodeJS.ErrnoException => {

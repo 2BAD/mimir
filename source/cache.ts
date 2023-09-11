@@ -1,18 +1,18 @@
 import { getTranslationContent } from './fs.ts'
-import { type LocaleTranslations, type Translations, type TranslationsCache } from './types.ts'
+import { type Locale, type LocaleTranslations, type Translations, type TranslationsCache } from './types.ts'
 
 /**
  *
  * @param translationsPath
  */
-export const createCacheStorage = (translationsPath: string): TranslationsCache => {
+export const createCacheStorage = (translationsPath: string[]): TranslationsCache => {
   let cache: LocaleTranslations
 
   /**
    *
    * @param locale
    */
-  const refresh = (locale: string): void => {
+  const refresh = (locale: Locale): void => {
     cache[locale] = getTranslationContent(translationsPath, locale)
   }
 
@@ -20,7 +20,7 @@ export const createCacheStorage = (translationsPath: string): TranslationsCache 
    *
    * @param locale
    */
-  const get = (locale: string): Translations | null => {
+  const get = (locale: Locale): Translations | null => {
     if (!cache[locale]) {
       refresh(locale)
     }
