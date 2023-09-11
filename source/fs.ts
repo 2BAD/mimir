@@ -46,7 +46,7 @@ export const resolveFilePath = (translationsPath: string, locale: string): strin
  * @param locale - The locale of the translations.
  * @returns The translations data.
  */
-export const readFromFile = (translationsPath: string, locale: string): TranslationsData => {
+export const getTranslationContent = (translationsPath: string, locale: string): TranslationsData => {
   let translations: TranslationsData = {}
   const filePath = resolveFilePath(translationsPath, locale)
 

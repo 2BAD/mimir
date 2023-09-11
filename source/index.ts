@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import fs from 'fs'
 import path from 'path'
-import { findTranslationFiles, getAvailableLocales, readFromFile } from './fs.ts'
+import { findTranslationFiles, getAvailableLocales, getTranslationContent } from './fs.ts'
 import { containsApostrophes, containsHtmlTags, containsPlaceholders, containsPlural } from './rules.ts'
 import { type TranslationsData } from './types.ts'
 
@@ -20,10 +20,6 @@ function findTranslationsFolder(searchKey: string, translationPaths: string[]): 
   return ''
 }
 
-function getTranslationContent(locale: string, folderPath: string) {
-  return readFromFile(folderPath, locale)
-}
-
 function getTranslationValue(translationContent: TranslationsData, key: string): string {
   return translationContent[key]
 }
@@ -31,12 +27,12 @@ function getTranslationValue(translationContent: TranslationsData, key: string):
 export function getHardKeys(keys: string[], targetLocale: string): TranslationsData {
   const result: TranslationsData = {}
 
-  const translationPaths = findTranslationsPath(targetLocale)
+  const translationPaths = findTranslationFiles(searchPath)
 
   for (const key of keys) {
     const folderPath = findTranslationsFolder(key, translationPaths)
 
-    const targetTranslationContent = getTranslationContent(targetLocale, folderPath)
+    const targetTranslationContent = getTranslationContent(folderPath, targetLocale)
     const targetValue = getTranslationValue(targetTranslationContent, key)
     const availableLocales = getAvailableLocales(folderPath)
 
