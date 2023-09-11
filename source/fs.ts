@@ -1,7 +1,7 @@
 import { globSync } from 'fast-glob'
 import fs from 'node:fs'
 import path from 'node:path'
-import { isErrnoException, type TranslationsData } from './types.ts'
+import { isErrnoException, type Translations } from './types.ts'
 
 /**
  * Finds translation files in the specified path.
@@ -46,13 +46,13 @@ export const resolveFilePath = (translationsPath: string, locale: string): strin
  * @param locale - The locale of the translations.
  * @returns The translations data.
  */
-export const getTranslationContent = (translationsPath: string, locale: string): TranslationsData => {
-  let translations: TranslationsData = {}
+export const getTranslationContent = (translationsPath: string, locale: string): Translations => {
+  let translations: Translations = {}
   const filePath = resolveFilePath(translationsPath, locale)
 
   try {
     const content = fs.readFileSync(filePath, 'utf-8')
-    translations = JSON.parse(content) as TranslationsData
+    translations = JSON.parse(content) as Translations
   } catch (error) {
     if (isErrnoException(error)) {
       switch (error.code) {

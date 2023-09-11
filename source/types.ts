@@ -1,6 +1,14 @@
 /* eslint-disable jsdoc/require-jsdoc */
-export type TranslationsData = Record<string, string>
-export type TranslationsCache = Record<string, TranslationsData>
+export enum Locale {
+  English = 'en',
+  French = 'fr',
+  German = 'de',
+  Japanese = 'jp',
+  BrazilianPortuguese = 'pt_BR'
+}
+
+export type Translations = Record<string, string>
+export type LocaleTranslations = Record<Locale, Translations>
 
 export type Translator = {
   findLocaleByText: (text: string) => string | null
