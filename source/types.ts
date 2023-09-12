@@ -13,7 +13,7 @@ export type LocaleTranslations = Record<Locale, Translations>
 export type KeyToTranslationsMap = {
   [key in Locale]?: string
 } & {
-  paths: string[]
+  path: string
 }
 
 export type Translator = {

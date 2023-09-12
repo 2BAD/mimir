@@ -38,8 +38,7 @@ export const createCache = (translationsPath: string[]): TranslationsCache => {
    */
   const ingest = (key: string, value: string, locale: Locale, path: string): void => {
     const data: KeyToTranslationsMap = {
-      // this should be appended instead
-      paths: [path]
+      path
     }
     data[locale] = value
     cache.set(key, Object.assign({}, cache.get(key), data))
@@ -60,12 +59,14 @@ export const createCache = (translationsPath: string[]): TranslationsCache => {
    * If the translations are not available in the cache, it refreshes the cache first.
    *
    * @param key - The key to retrieve translations for.
-   * @param locale - The locale for which to retrieve translations.
+   * @param locales - The locale for which to retrieve translations.
    * @returns - The translations for the specified locale, or null if not found.
    */
-  const get = (key: string, locale: Locale): KeyToTranslationsMap | null => {
+  const get = (key: string, locales: Locale[]): KeyToTranslationsMap | null => {
     if (cache.has(key) === undefined) {
-      refresh(locale)
+      for (const locale of locales) {
+        refresh(locale)
+      }
     }
     return cache.get(key) ?? null
   }
