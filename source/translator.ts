@@ -1,6 +1,7 @@
 import { createCache } from './cache.ts'
-import { findTranslationFiles, getAvailableLocales } from './fs.ts'
+import { findTranslationFiles } from './fs.ts'
 import { type Locale, type Translator } from './types.ts'
+import { getLocalesFromPaths } from './utils.ts'
 
 /**
  * Initializes a translator object.
@@ -10,12 +11,12 @@ import { type Locale, type Translator } from './types.ts'
  * @returns The initialized Translator object.
  */
 export const initTranslator = (path: string, locales: Locale[] = []): Translator => {
-  if (locales.length === 0) {
-    locales = getAvailableLocales(path)
-  }
-
   const translationFiles = findTranslationFiles(path, locales)
   const cache = createCache(translationFiles)
+
+  if (locales.length === 0) {
+    locales = getLocalesFromPaths(translationFiles)
+  }
 
   return {
     /**
