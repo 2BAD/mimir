@@ -10,7 +10,7 @@ import { isErrnoException, type Locale, type Translations } from './types.ts'
  * @param [locales] - Optional array of locales to search for.
  * @returns An array of found translation file paths.
  */
-export const findTranslationFiles = (searchPath: string, locales?: Locale[]): string[] => {
+export const findTranslationFiles = (searchPath: string, locales: Locale[] = []): string[] => {
   const pattern = locales?.length !== 0 ? `{${locales?.join(',')}}` : '*'
   return globSync(['!**/node_modules/**', path.join(searchPath, `**/translation.${pattern}.json`)])
 }
@@ -102,5 +102,5 @@ export const getAvailableLocales = (folderPath: string): Locale[] => {
     }
   }
 
-  return locales
+  return locales as Locale[]
 }
