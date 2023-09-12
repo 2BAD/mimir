@@ -12,11 +12,12 @@ import { getLocalesFromPaths } from './utils.ts'
  */
 export const initTranslator = (path: string, locales: Locale[] = []): Translator => {
   const translationFiles = findTranslationFiles(path, locales)
-  const cache = createCache(translationFiles)
 
   if (locales.length === 0) {
     locales = getLocalesFromPaths(translationFiles)
   }
+
+  const cache = createCache(translationFiles, locales)
 
   return {
     /**
@@ -42,7 +43,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
      * @returns The translated text, or null if not found.
      */
     getText: (locale: Locale, key: string): string | null => {
-      const translations = cache.get(key, [locale])
+      const translations = cache.get(key, locale)
       return translations?.[locale] ?? null
     },
 
@@ -53,7 +54,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
      * @returns - The path to the translations file if found, or null otherwise.
      */
     findTranslationsFolder(key: string): string | null {
-      const translations = cache.get(key, locales)
+      const translations = cache.get(key)
       return translations ? translations.path : null
     }
   }
