@@ -23,6 +23,7 @@ export type Translator = {
 
 export type TranslationsCache = {
   get: (key: string, locale: Locale) => KeyToTranslationsMap | null
+  values: () => Iterable<KeyToTranslationsMap>
   refresh: (locale: Locale) => void
 }
 

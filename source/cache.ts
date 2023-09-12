@@ -70,5 +70,5 @@ export const createCache = (translationsPath: string[]): TranslationsCache => {
     return cache.get(key) ?? null
   }
 
-  return { get, refresh }
+  return { get, refresh, values: cache.values.bind(cache) }
 }

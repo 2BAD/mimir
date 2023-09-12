@@ -25,10 +25,9 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
      * @returns The locale of the text, or null if not found.
      */
     findLocaleByText: (text: string): string | null => {
-      for (const locale of locales) {
-        const translations = cacheStorage.get(locale)
-        if (translations && Object.values(translations).includes(text)) {
-          return locale
+      for (const translationMap of cache.values()) {
+        for (const [locale, translation] of Object.entries(translationMap)) {
+          if (translation.includes(text)) return locale
         }
       }
       return null
