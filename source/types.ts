@@ -8,23 +8,24 @@ export enum Locale {
 }
 
 export type Translations = Record<string, string>
-export type LocaleTranslations = Record<Locale, Translations>
-
-export type KeyToTranslationsMap = {
+export type TranslationsMap = {
   [key in Locale]?: string
-} & {
+}
+
+export type TranslationsCacheObject = TranslationsMap & {
   path: string
 }
 
 export type Translator = {
   getText: (locale: Locale, key: string) => string | null
+  getTranslations: (key: string) => TranslationsCacheObject | null
   findLocaleByText: (text: string) => string | null
   findTranslationsFolder: (key: string) => string | null
 }
 
 export type TranslationsCache = {
-  get: (key: string, locale: Locale) => KeyToTranslationsMap | null
-  values: () => Iterable<KeyToTranslationsMap>
+  get: (key: string, locale?: Locale) => TranslationsCacheObject | null
+  values: () => Iterable<TranslationsCacheObject>
   refresh: (locale: Locale) => void
 }
 

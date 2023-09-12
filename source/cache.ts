@@ -1,6 +1,6 @@
 import { filterPathsByLocale } from 'utils.ts'
 import { readTranslationsFromFile } from './fs.ts'
-import { type KeyToTranslationsMap, type Locale, type TranslationsCache } from './types.ts'
+import { type Locale, type TranslationsCache, type TranslationsCacheObject } from './types.ts'
 
 /**
  * Creates a cache storage for translations.
@@ -10,7 +10,7 @@ import { type KeyToTranslationsMap, type Locale, type TranslationsCache } from '
  * @returns - The translations cache object.
  */
 export const createCache = (translationFilePaths: string[], cachedLocales: Locale[]): TranslationsCache => {
-  const cache = new Map<string, KeyToTranslationsMap>()
+  const cache = new Map<string, TranslationsCacheObject>()
   const translationFilePathSet = new Set(translationFilePaths)
 
   /**
@@ -38,7 +38,7 @@ export const createCache = (translationFilePaths: string[], cachedLocales: Local
    * @param path - The path to the file where the translation is coming from.
    */
   const ingest = (key: string, value: string, locale: Locale, path: string): void => {
-    const data: KeyToTranslationsMap = {
+    const data: TranslationsCacheObject = {
       path
     }
     data[locale] = value
@@ -63,7 +63,7 @@ export const createCache = (translationFilePaths: string[], cachedLocales: Local
    * @param locale - The locale for which to retrieve translations.
    * @returns - The translations for the specified locale, or null if not found.
    */
-  const get = (key: string, locale?: Locale): KeyToTranslationsMap | null => {
+  const get = (key: string, locale?: Locale): TranslationsCacheObject | null => {
     if (!cache.has(key)) {
       if (locale !== undefined) {
         refresh(locale)

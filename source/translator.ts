@@ -1,6 +1,6 @@
 import { createCache } from './cache.ts'
 import { findTranslationFiles } from './fs.ts'
-import { type Locale, type Translator } from './types.ts'
+import { type Locale, type TranslationsCacheObject, type Translator } from './types.ts'
 import { getLocalesFromPaths } from './utils.ts'
 
 /**
@@ -45,6 +45,17 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
     getText: (locale: Locale, key: string): string | null => {
       const translations = cache.get(key, locale)
       return translations?.[locale] ?? null
+    },
+
+    /**
+     * Retrieves translations for a specific key.
+     *
+     * @param key - The key to lookup translations for.
+     * @returns - The translations for the key, or null if not found.
+     */
+    getTranslations: (key: string): TranslationsCacheObject | null => {
+      const translations = cache.get(key)
+      return translations
     },
 
     /**
