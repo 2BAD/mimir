@@ -6,9 +6,10 @@ import { type KeyToTranslationsMap, type Locale, type TranslationsCache } from '
  * Creates a cache storage for translations.
  *
  * @param translationsPath - An array of paths to translation files.
+ * @param cachedLocales - An array of locales to use.
  * @returns - The translations cache object.
  */
-export const createCache = (translationsPath: string[]): TranslationsCache => {
+export const createCache = (translationsPath: string[], cachedLocales: Locale[]): TranslationsCache => {
   const cache = new Map<string, KeyToTranslationsMap>()
   const pathSet = new Set(translationsPath)
 
@@ -59,13 +60,17 @@ export const createCache = (translationsPath: string[]): TranslationsCache => {
    * If the translations are not available in the cache, it refreshes the cache first.
    *
    * @param key - The key to retrieve translations for.
-   * @param locales - The locale for which to retrieve translations.
+   * @param locale - The locale for which to retrieve translations.
    * @returns - The translations for the specified locale, or null if not found.
    */
-  const get = (key: string, locales: Locale[]): KeyToTranslationsMap | null => {
-    if (cache.has(key) === undefined) {
-      for (const locale of locales) {
+  const get = (key: string, locale?: Locale): KeyToTranslationsMap | null => {
+    if (!cache.has(key)) {
+      if (locale !== undefined) {
         refresh(locale)
+      } else {
+        for (const l of cachedLocales) {
+          refresh(l)
+        }
       }
     }
     return cache.get(key) ?? null
