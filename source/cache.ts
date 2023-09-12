@@ -5,27 +5,27 @@ import { type KeyToTranslationsMap, type Locale, type TranslationsCache } from '
 /**
  * Creates a cache storage for translations.
  *
- * @param translationsPath - An array of paths to translation files.
+ * @param translationFilePaths - An array of paths to translation files.
  * @param cachedLocales - An array of locales to use.
  * @returns - The translations cache object.
  */
-export const createCache = (translationsPath: string[], cachedLocales: Locale[]): TranslationsCache => {
+export const createCache = (translationFilePaths: string[], cachedLocales: Locale[]): TranslationsCache => {
   const cache = new Map<string, KeyToTranslationsMap>()
-  const pathSet = new Set(translationsPath)
+  const translationFilePathSet = new Set(translationFilePaths)
 
   /**
    * Process the paths to translation files and ingest the translations.
    *
-   * @param paths - An array of paths to translation files.
+   * @param translationPaths - An array of paths to translation files.
    * @param locale - The locale of the translation.
    */
-  const process = (paths: string[], locale: Locale): void => {
-    for (const path of paths) {
+  const process = (translationPaths: string[], locale: Locale): void => {
+    for (const path of translationPaths) {
       const translations = readTranslationsFromFile(path)
       for (const [key, value] of Object.entries(translations)) {
         ingest(key, value, locale, path)
       }
-      pathSet.delete(path)
+      translationFilePathSet.delete(path)
     }
   }
 
@@ -42,7 +42,7 @@ export const createCache = (translationsPath: string[], cachedLocales: Locale[])
       path
     }
     data[locale] = value
-    cache.set(key, Object.assign({}, cache.get(key), data))
+    cache.set(key, { ...cache.get(key), ...data })
   }
 
   /**
@@ -51,7 +51,7 @@ export const createCache = (translationsPath: string[], cachedLocales: Locale[])
    * @param locale - The locale to refresh.
    */
   const refresh = (locale: Locale): void => {
-    const paths = filterPathsByLocale([...pathSet.values()], locale)
+    const paths = filterPathsByLocale([...translationFilePathSet.values()], locale)
     process(paths, locale)
   }
 
