@@ -1,4 +1,4 @@
-import { createCacheStorage } from './cache.ts'
+import { createCache } from './cache.ts'
 import { findTranslationFiles, getAvailableLocales } from './fs.ts'
 import { type Locale, type Translator } from './types.ts'
 
@@ -15,7 +15,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
   }
 
   const translationFiles = findTranslationFiles(path, locales)
-  const cacheStorage = createCacheStorage(translationFiles)
+  const cache = createCache(translationFiles)
 
   return {
     /**
@@ -41,8 +41,8 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
      * @returns The translated text, or null if not found.
      */
     getText: (locale: Locale, key: string): string | null => {
-      const translations = cacheStorage.get(locale)
-      return translations?.[key] ?? null
+      const translations = cache.get(key, locale)
+      return translations?.[locale] ?? null
     }
   }
 }

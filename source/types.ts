@@ -10,13 +10,19 @@ export enum Locale {
 export type Translations = Record<string, string>
 export type LocaleTranslations = Record<Locale, Translations>
 
+export type KeyToTranslationsMap = {
+  [key in Locale]?: string
+} & {
+  paths: string[]
+}
+
 export type Translator = {
   findLocaleByText: (text: string) => string | null
   getText: (locale: Locale, key: string) => string | null
 }
 
 export type TranslationsCache = {
-  get: (locale: Locale) => Translations | null
+  get: (key: string, locale: Locale) => KeyToTranslationsMap | null
   refresh: (locale: Locale) => void
 }
 
