@@ -32,6 +32,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
       }
       return null
     },
+
     /**
      * Retrieves the translated text for a given locale and key.
      *
@@ -40,8 +41,19 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
      * @returns The translated text, or null if not found.
      */
     getText: (locale: Locale, key: string): string | null => {
-      const translations = cache.get(key, locale)
+      const translations = cache.get(key, [locale])
       return translations?.[locale] ?? null
+    },
+
+    /**
+     * Finds path to translations file for a given key.
+     *
+     * @param key - The key to search for in the cache.
+     * @returns - The path to the translations file if found, or null otherwise.
+     */
+    findTranslationsFolder(key: string): string | null {
+      const translations = cache.get(key, locales)
+      return translations ? translations.path : null
     }
   }
 }

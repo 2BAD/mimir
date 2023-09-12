@@ -17,12 +17,13 @@ export type KeyToTranslationsMap = {
 }
 
 export type Translator = {
-  findLocaleByText: (text: string) => string | null
   getText: (locale: Locale, key: string) => string | null
+  findLocaleByText: (text: string) => string | null
+  findTranslationsFolder: (key: string) => string | null
 }
 
 export type TranslationsCache = {
-  get: (key: string, locale: Locale) => KeyToTranslationsMap | null
+  get: (key: string, locales: Locale[]) => KeyToTranslationsMap | null
   values: () => Iterable<KeyToTranslationsMap>
   refresh: (locale: Locale) => void
 }
