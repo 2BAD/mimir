@@ -1,5 +1,5 @@
 import { filterPathsByLocale } from 'utils.ts'
-import { getTranslationContent } from './fs.ts'
+import { readTranslationsFromFile } from './fs.ts'
 import { type KeyToTranslationsMap, type Locale, type TranslationsCache } from './types.ts'
 
 /**
@@ -20,7 +20,7 @@ export const createCache = (translationsPath: string[]): TranslationsCache => {
    */
   const process = (paths: string[], locale: Locale): void => {
     for (const path of paths) {
-      const translations = getTranslationContent(path)
+      const translations = readTranslationsFromFile(path)
       for (const [key, value] of Object.entries(translations)) {
         ingest(key, value, locale, path)
       }

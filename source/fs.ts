@@ -21,7 +21,7 @@ export const findTranslationFiles = (searchPath: string, locales: Locale[] = [])
  * @param filePath - The path to the translations file.
  * @returns The translations data.
  */
-export const getTranslationContent = (filePath: string): Translations => {
+export const readTranslationsFromFile = (filePath: string): Translations => {
   let translations: Translations = {}
 
   try {
