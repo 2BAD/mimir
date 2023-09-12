@@ -1,94 +1,46 @@
-/* eslint-disable jsdoc/require-jsdoc */
-import fs from 'fs'
-import path from 'path'
-import { findTranslationFiles, getAvailableLocales, getTranslationContent, resolveFilePath } from './fs.ts'
-import { containsApostrophes, containsHtmlTags, containsPlaceholders, containsPlural } from './rules.ts'
-import { type Translations } from './types.ts'
+import {
+  findTranslationsFolder,
+  findTranslationsPaths,
+  getAvailableLocales,
+  readFromFile,
+  writeIntoJson,
+  writeIntoXLSX
+} from './fs'
+import { keys } from './keys'
+import { isProblematic } from './rules'
+import { type TranslationsData } from './types'
 
-function findTranslationsFolder(searchKey: string, translationPaths: string[]): string {
-  for (const filePath of translationPaths) {
-    const translations = getTranslationContent(filePath)
-    if (translations[searchKey] !== undefined) {
-      const directoryPath = path.dirname(filePath)
-      return directoryPath
-    }
-  }
+const rootPath = '/Users/oleh.zhmaiev/dev/client'
 
-  return ''
-}
+/**
+ *
+ * @param keys
+ * @param targetLocale
+ */
+export function getProblematicKeys(keys: string[], targetLocale: string): TranslationsData {
+  const result: TranslationsData = {}
 
-// this should be something like this:
-// export const validateTranslations = (translations: Translations, keys: string[], rules: string[]): ValidationErrors => {
-
-export function getHardKeys(searchPath: string, keys: string[], targetLocale: string): Translations {
-  const result: Translations = {}
-
-  const translationPaths = findTranslationFiles(searchPath)
+  const translationPaths = findTranslationsPaths(rootPath, targetLocale)
 
   for (const key of keys) {
     const folderPath = findTranslationsFolder(key, translationPaths)
 
-    const translationFilePath = resolveFilePath(folderPath, targetLocale)
-    const targetTranslationContent = getTranslationContent(translationFilePath)
+    if (folderPath) {
+      const availableLocales = getAvailableLocales(folderPath)
 
-    const targetValue = targetTranslationContent[key]
-    const availableLocales = getAvailableLocales(folderPath)
-
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (folderPath && targetValue) {
-      if (
-        containsPlural(key) ||
-        containsHtmlTags(targetValue) ||
-        containsApostrophes(targetValue) ||
-        containsPlaceholders(targetValue)
-      ) {
-        const targetTranslationFilePath = resolveFilePath(folderPath, targetLocale)
-        const targetTranslation = getTranslationContent(targetTranslationFilePath)
+      if (isProblematic(key, targetLocale, folderPath, availableLocales)) {
+        const targetTranslation = readFromFile(folderPath, targetLocale)
         result[key] = targetTranslation[key]
       }
-
-      // for (const locale of availableLocales) {
-      //   if (locale !== targetLocale) {
-      //     const translationContent = getTranslationContent(locale, folderPath);
-      //     const translationValue = getTranslationValue(translationContent, key);
-
-      //     console.log(targetValue);
-
-      //     if (isValueLonger(targetValue, translationValue)) {
-      //       const targetTranslation = readFromFile(folderPath, targetLocale);
-      //       result[key] = targetTranslation[key];
-      //     }
-      //   }
-      // }
     }
   }
+
   return result
 }
 
-function putHardKeysIntoFile(data: Translations): void {
-  const resultJSON = JSON.stringify(data, null, 2)
-  fs.writeFileSync('output.json', resultJSON, 'utf8')
-}
-
-const keys2: string[] = [
-  'settings.accountSettings.installedApps.addAppsHTML',
-  'settings.accountSettings.installedApps.addedApps',
-  'settings.accountSettings.installedApps.allowNonAdminsToAdd',
-  'settings.accountSettings.installedApps.alreadyAddedApps',
-  'settings.accountSettings.installedApps.appsExtendBoardHTML',
-  'settings.accountSettings.installedApps.askYourAdminToAddApps',
-  'settings.accountSettings.installedApps.authorizedByTeamMember',
-  'settings.accountSettings.installedApps.authorizedByTeamMember_plural',
-  'settings.accountSettings.installedApps.getMoreAppControl',
-  'settings.accountSettings.installedApps.manageAppsInTeam',
-  'settings.accountSettings.installedApps.useAppsToExtendBoard',
-  'settings.accountSettings.platformApps.support.rtbSupportApps.askForSupportHTML',
-  'settings.accountsSettings.editApps.permissions.scopeDescription.auditlogsRead'
-]
-
 const targetLocale = 'pt_BR'
-const rootPath = '/Users/oleh.zhmaiev/dev/client'
-const hardKeys = getHardKeys(rootPath, keys2, targetLocale)
+const outputPath = 'output'
+const hardKeys = getProblematicKeys(keys, targetLocale)
 
-// eslint-disable-next-line vitest/require-hook
-putHardKeysIntoFile(hardKeys)
+writeIntoJson(hardKeys, outputPath)
+writeIntoXLSX(hardKeys, outputPath)
