@@ -1,4 +1,4 @@
-import { type Locale } from './types.ts'
+import { type Locale } from '~/types.js'
 
 /**
  * Filters an array of paths to keep only those matching a given locale.

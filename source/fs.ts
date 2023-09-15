@@ -1,7 +1,9 @@
-import { globSync } from 'fast-glob'
+import glob from 'fast-glob'
 import fs from 'node:fs'
 import path from 'node:path'
-import { isErrnoException, type Locale, type Translations } from './types.ts'
+import { isErrnoException, type Locale, type Translations } from '~/types.js'
+
+const { globSync } = glob
 
 /**
  * Finds translation files based on a search path and optional locales.

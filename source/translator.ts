@@ -1,7 +1,7 @@
-import { createCache } from './cache.ts'
-import { findTranslationFiles } from './fs.ts'
-import { type Locale, type TranslationsCacheObject, type Translator } from './types.ts'
-import { getLocalesFromPaths } from './utils.ts'
+import { createCache } from '~/cache.js'
+import { findTranslationFiles } from '~/fs.js'
+import { type Locale, type TranslationsCacheObject, type Translator } from '~/types.js'
+import { getLocalesFromPaths } from '~/utils.js'
 
 /**
  * Initializes a translator object.
