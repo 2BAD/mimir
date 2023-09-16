@@ -1,11 +1,17 @@
-/* eslint-disable jsdoc/require-jsdoc */
-export enum Locale {
-  English = 'en',
-  French = 'fr',
-  German = 'de',
-  Japanese = 'jp',
-  BrazilianPortuguese = 'pt_BR'
-}
+import { z } from 'zod'
+
+export const LocaleValues = {
+  English: 'en',
+  French: 'fr',
+  German: 'de',
+  Spanish: 'es',
+  Japanese: 'ja_JP',
+  BrazilianPortuguese: 'pt_BR'
+} as const
+
+export const Locale = z.nativeEnum(LocaleValues)
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type Locale = z.infer<typeof Locale>
 
 export type Translations = Record<string, string>
 export type TranslationsMap = {
@@ -29,6 +35,7 @@ export type TranslationsCache = {
   refresh: (locale: Locale) => void
 }
 
+// eslint-disable-next-line jsdoc/require-jsdoc
 export const isErrnoException = (error: unknown): error is NodeJS.ErrnoException => {
   const properties = ['errno', 'code', 'syscall', 'path', 'stack']
 

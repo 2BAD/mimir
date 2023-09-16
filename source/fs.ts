@@ -1,8 +1,11 @@
+// eslint-disable-next-line import/no-named-as-default
 import glob from 'fast-glob'
 import fs from 'node:fs'
 import path from 'node:path'
 import { isErrnoException, type Locale, type Translations } from '~/types.js'
 
+// workaround since we cant use named exports from commonjs module
+// eslint-disable-next-line import/no-named-as-default-member
 const { globSync } = glob
 
 /**
@@ -13,8 +16,9 @@ const { globSync } = glob
  * @returns An array of found translation file paths.
  */
 export const findTranslationFiles = (searchPath: string, locales: Locale[] = []): string[] => {
-  const pattern = locales?.length !== 0 ? `{${locales?.join(',')}}` : '*'
-  return globSync(['!**/node_modules/**', path.join(searchPath, `**/translation.${pattern}.json`)])
+  const variants = locales?.length !== 0 ? `{${locales?.join(',')}}` : '*'
+  const pattern = path.join(searchPath, `**/translation.${variants}.json`)
+  return globSync(['!**/node_modules/**', pattern])
 }
 
 /**

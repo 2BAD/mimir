@@ -1,6 +1,6 @@
-import { filterPathsByLocale } from 'utils.js'
 import { readTranslationsFromFile } from '~/fs.js'
 import { type Locale, type TranslationsCache, type TranslationsCacheObject } from '~/types.js'
+import { filterPathsByLocale } from './utils.js'
 
 /**
  * Creates a cache storage for translations.
