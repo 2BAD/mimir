@@ -8,7 +8,7 @@ import { type Locale } from '~/types.js'
  * @returns - The filtered array of paths that match the locale.
  */
 export const filterPathsByLocale = (paths: string[], locale: Locale): string[] => {
-  const regex = new RegExp(`^translation\\.${locale}\\.json$`)
+  const regex = new RegExp(`translation\\.${locale}\\.json$`)
   return paths.filter((path) => regex.test(path))
 }
 
