@@ -3,6 +3,7 @@ import glob from 'fast-glob'
 import fs from 'node:fs'
 import path from 'node:path'
 import { isErrnoException, type Locale, type Translations } from '~/types.js'
+const debug = (await import('debug')).default('fs')
 
 // workaround since we cant use named exports from commonjs module
 // eslint-disable-next-line import/no-named-as-default-member
@@ -18,6 +19,7 @@ const { globSync } = glob
 export const findTranslationFiles = (searchPath: string, locales: Locale[] = []): string[] => {
   const variants = locales?.length !== 0 ? (locales.length === 1 ? locales[0] : `{${locales?.join(',')}}`) : '*'
   const pattern = path.join(searchPath, `**/translation.${variants}.json`)
+  debug(`looking for translation files in '%s' for locales: %o`, pattern, locales)
   return globSync(['!**/node_modules/**', pattern])
 }
 
@@ -31,6 +33,7 @@ export const readTranslationsFromFile = (filePath: string): Translations => {
   let translations: Translations = {}
 
   try {
+    debug(`reading file '%s'`, filePath)
     const content = fs.readFileSync(filePath, 'utf-8')
     translations = JSON.parse(content) as Translations
   } catch (error) {
