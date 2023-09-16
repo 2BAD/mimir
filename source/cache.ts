@@ -1,6 +1,7 @@
 import { readTranslationsFromFile } from '~/fs.js'
 import { type Locale, type TranslationsCache, type TranslationsCacheObject } from '~/types.js'
 import { filterPathsByLocale } from './utils.js'
+const debug = (await import('debug')).default('cache')
 
 /**
  * Creates a cache storage for translations.
@@ -10,6 +11,7 @@ import { filterPathsByLocale } from './utils.js'
  * @returns - The translations cache object.
  */
 export const createCache = (translationFilePaths: string[], cachedLocales: Locale[]): TranslationsCache => {
+  debug('initializing cache')
   const cache = new Map<string, TranslationsCacheObject>()
   const translationFilePathSet = new Set(translationFilePaths)
 
@@ -20,6 +22,7 @@ export const createCache = (translationFilePaths: string[], cachedLocales: Local
    * @param locale - The locale of the translation.
    */
   const process = (translationPaths: string[], locale: Locale): void => {
+    debug('processing %s files for locale %s', translationPaths.length, locale)
     for (const path of translationPaths) {
       const translations = readTranslationsFromFile(path)
       for (const [key, value] of Object.entries(translations)) {
@@ -51,6 +54,7 @@ export const createCache = (translationFilePaths: string[], cachedLocales: Local
    * @param locale - The locale to refresh.
    */
   const refresh = (locale: Locale): void => {
+    debug('refreshing cache for locale %s', locale)
     const paths = filterPathsByLocale([...translationFilePathSet.values()], locale)
     process(paths, locale)
   }
@@ -64,6 +68,7 @@ export const createCache = (translationFilePaths: string[], cachedLocales: Local
    * @returns - The translations for the specified locale, or null if not found.
    */
   const get = (key: string, locale?: Locale): TranslationsCacheObject | null => {
+    debug(`getting translations for '%s' for locale %s`, key, locale)
     if (!cache.has(key)) {
       if (locale !== undefined) {
         refresh(locale)
