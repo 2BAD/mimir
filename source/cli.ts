@@ -4,6 +4,7 @@
 import meow from 'meow'
 import { initTranslator } from './translator.js'
 import { type Locale } from './types.js'
+import { validateTranslations } from './validator.js'
 
 const cli = meow(
   `
@@ -64,5 +65,8 @@ if (cli.input.at(0) === 'translate') {
 }
 if (cli.input.at(0) === 'validate') {
   console.log('Validating!', cli.flags)
-  // const translator = initTranslator(cli.flags.path, cli.flags.locale?.split(',') as Locale[])
+  const translator = initTranslator(cli.flags.path, cli.flags.locale?.split(',') as Locale[])
+  if (cli.flags.key !== undefined) {
+    console.log(validateTranslations(translator, cli.flags.key.split(',')))
+  }
 }
