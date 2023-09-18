@@ -1,6 +1,6 @@
 // import { readFromFile } from "./fs";
 
-import { type TranslationsCacheObject } from './types.js'
+import { type Locale, type TranslationsCacheObject } from './types.js'
 
 /**
  * Checks if the translations object contains identical translations.
@@ -19,17 +19,19 @@ export const containsIdenticalTranslation = (translations: TranslationsCacheObje
     return m
   }, new Map())
 
-  const locales = Object.entries(translations)
+  const locales: string[] = Object.entries(translations)
     .filter(([_, t]) => fm.get(t) > 1)
     .map((e) => e[0])
 
-  if (locales.length === 0) {
-    return false
-  } else {
+  if (locales.length > 0) {
     return {
       path: translations.path,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      translation: translations[locales[0] as Locale] as string,
       message: `Following locales have the same translation: ${locales.toString()}`
     }
+  } else {
+    return false
   }
 }
 

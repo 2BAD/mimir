@@ -66,7 +66,5 @@ if (cli.input.at(0) === 'translate') {
 if (cli.input.at(0) === 'validate') {
   console.log('Validating!', cli.flags)
   const translator = initTranslator(cli.flags.path, cli.flags.locale?.split(',') as Locale[])
-  if (cli.flags.key !== undefined) {
-    console.log(validateTranslations(translator, cli.flags.key.split(',')))
-  }
+  console.log(validateTranslations(translator, cli.flags.key !== undefined ? cli.flags.key.split(',') : undefined))
 }
