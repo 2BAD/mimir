@@ -82,8 +82,14 @@ export const createCache = (translationFilePaths: string[], cachedLocales: Local
   }
 
   return { get, refresh, values: cache.values.bind(cache) }
+  const keys = (): string[] => {
+    debug('getting keys from cache %o', cache)
+    return [...cache.keys()]
+  }
   const values = (): TranslationsCacheObject[] => {
     debug('getting values from cache %o', cache)
     return [...cache.values()]
   }
+
+  return { get, refresh, keys, values }
 }

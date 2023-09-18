@@ -24,6 +24,7 @@ export type TranslationsCacheObject = TranslationsMap & {
 
 export type Translator = {
   getText: (locale: Locale, key: string) => string | null
+  getKeys: () => string[]
   getTranslations: (key: string) => TranslationsCacheObject | null
   findLocaleByText: (text: string) => string | null
   findTranslationsFolder: (key: string) => string | null
@@ -31,7 +32,7 @@ export type Translator = {
 
 export type TranslationsCache = {
   get: (key: string, locale?: Locale) => TranslationsCacheObject | null
-  values: () => Iterable<TranslationsCacheObject>
+  keys: () => string[]
   values: () => TranslationsCacheObject[]
   refresh: (locale: Locale) => void
 }
