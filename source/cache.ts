@@ -11,7 +11,7 @@ const debug = (await import('debug')).default('cache')
  * @returns - The translations cache object.
  */
 export const createCache = (translationFilePaths: string[], cachedLocales: Locale[]): TranslationsCache => {
-  debug('initializing cache')
+  debug(`initializing cache for path '%o' and locales %o`, translationFilePaths, cachedLocales)
   const cache = new Map<string, TranslationsCacheObject>()
   const translationFilePathSet = new Set(translationFilePaths)
 
@@ -53,10 +53,14 @@ export const createCache = (translationFilePaths: string[], cachedLocales: Local
    *
    * @param locale - The locale to refresh.
    */
-  const refresh = (locale: Locale): void => {
-    debug('refreshing cache for locale %s', locale)
-    const paths = filterPathsByLocale([...translationFilePathSet.values()], locale)
-    process(paths, locale)
+  const refresh = (locale?: Locale): void => {
+    const locales: Locale[] = locale ? [locale] : cachedLocales
+
+    for (const l of locales) {
+      debug('refreshing cache for locale %s', l)
+      const p = filterPathsByLocale([...translationFilePathSet.values()], l)
+      process(p, l)
+    }
   }
 
   /**
@@ -70,23 +74,24 @@ export const createCache = (translationFilePaths: string[], cachedLocales: Local
   const get = (key: string, locale?: Locale): TranslationsCacheObject | null => {
     debug(`getting translations for '%s' for locale %s`, key, locale)
     if (!cache.has(key)) {
-      if (locale !== undefined) {
-        refresh(locale)
-      } else {
-        for (const l of cachedLocales) {
-          refresh(l)
-        }
-      }
+      refresh(locale)
     }
     return cache.get(key) ?? null
   }
 
-  return { get, refresh, values: cache.values.bind(cache) }
+  /**
+   *
+   */
   const keys = (): string[] => {
+    refresh()
     debug('getting keys from cache %o', cache)
     return [...cache.keys()]
   }
+  /**
+   *
+   */
   const values = (): TranslationsCacheObject[] => {
+    refresh()
     debug('getting values from cache %o', cache)
     return [...cache.values()]
   }

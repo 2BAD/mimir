@@ -34,7 +34,7 @@ export type TranslationsCache = {
   get: (key: string, locale?: Locale) => TranslationsCacheObject | null
   keys: () => string[]
   values: () => TranslationsCacheObject[]
-  refresh: (locale: Locale) => void
+  refresh: (locale?: Locale) => void
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
