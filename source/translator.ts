@@ -42,7 +42,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * Retrieves translations for a specific key.
    *
    * @param key - The key to lookup translations for.
-   * @returns - The translations for the key, or null if not found.
+   * @returns The translations for the key, or null if not found.
    */
   const getTranslations = (key: string): TranslationsCacheObject | null => {
     const translations = cache.get(key)
@@ -50,7 +50,9 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
   }
 
   /**
+   * Retrieves the keys in the cache.
    *
+   * @returns The array of keys in the cache.
    */
   const getKeys = (): string[] => {
     const keys = [...cache.keys()]
@@ -58,10 +60,10 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
   }
 
   /**
-   * Finds path to translations file for a given key.
+   * Finds the path to the translations file for a given key.
    *
    * @param key - The key to search for in the cache.
-   * @returns - The path to the translations file if found, or null otherwise.
+   * @returns The path to the translations file if found, or null otherwise.
    */
   const findTranslationsFolder = (key: string): string | null => {
     const translations = cache.get(key)
