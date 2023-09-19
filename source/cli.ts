@@ -2,6 +2,8 @@
 /* eslint-disable vitest/require-hook */
 // eslint-disable-next-line n/shebang
 import meow from 'meow'
+import fs from 'node:fs'
+import { utils, writeFile } from 'xlsx'
 import { initTranslator } from './translator.js'
 import { type Locale } from './types.js'
 import { validateTranslations } from './validator.js'
@@ -54,6 +56,29 @@ const cli = meow(
   }
 )
 
+/**
+ *
+ * @param data
+ * @param outputPath
+ */
+const writeIntoXLSX = (data: Array<Record<string, string>>): void => {
+  // Convert the JSON data to an array of objects
+  // const dataForExcel = data.map((e) => ({
+  //   Key: key,
+  //   Value: data
+  // }))
+
+  // Create an Excel worksheet
+  const worksheet = utils.json_to_sheet(data)
+
+  // Create a workbook and add the worksheet
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, worksheet, 'Translations')
+
+  // Write the Excel file
+  writeFile(workbook, `./output.xlsx`)
+}
+
 if (cli.input.at(0) === 'translate') {
   console.log('Translating!', cli.flags)
   const translator = initTranslator(cli.flags.path, cli.flags.locale?.split(',') as Locale[])
@@ -66,5 +91,19 @@ if (cli.input.at(0) === 'translate') {
 if (cli.input.at(0) === 'validate') {
   console.log('Validating!', cli.flags)
   const translator = initTranslator(cli.flags.path, cli.flags.locale?.split(',') as Locale[])
-  console.log(validateTranslations(translator, cli.flags.key !== undefined ? cli.flags.key.split(',') : undefined))
+  const result = validateTranslations(translator, cli.flags.key !== undefined ? cli.flags.key.split(',') : undefined)
+  if (cli.flags.output === undefined) {
+    console.log(result)
+  } else {
+    switch (cli.flags.output) {
+      case 'json':
+        fs.writeFileSync('./output.json', JSON.stringify(result, null, 2))
+        break
+      case 'xls':
+        writeIntoXLSX(result)
+        break
+      default:
+        break
+    }
+  }
 }
