@@ -33,10 +33,15 @@ export const getLocaleFromPath = (path: string): Locale | null => {
  * @returns - Array of unique Locale objects derived from the paths.
  */
 export const getLocalesFromPaths = (paths: string[]): Locale[] => {
-  const set = paths.reduce((a, p) => {
-    const locale = getLocaleFromPath(p)
-    if (locale !== null) a.add(locale)
-    return a
-  }, new Set<Locale>())
-  return [...set.values()]
+  const set = new Set<Locale>()
+
+  for (const path of paths) {
+    const locale = getLocaleFromPath(path)
+
+    if (locale !== null) {
+      set.add(locale)
+    }
+  }
+
+  return Array.from(set)
 }
