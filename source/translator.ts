@@ -1,7 +1,5 @@
 import { createCache } from '~/storage/cache.js'
-import { findTranslationFiles } from '~/storage/fs.js'
 import { type Locale, type TranslationsCacheObject, type Translator } from '~/types.js'
-import { getLocalesFromPaths } from '~/utils.js'
 
 /**
  * Initializes a translator object.
@@ -11,13 +9,7 @@ import { getLocalesFromPaths } from '~/utils.js'
  * @returns The initialized Translator object.
  */
 export const initTranslator = (path: string, locales: Locale[] = []): Translator => {
-  const translationFiles = findTranslationFiles(path, locales)
-
-  if (locales.length === 0) {
-    locales = getLocalesFromPaths(translationFiles)
-  }
-
-  const cache = createCache(translationFiles, locales)
+  const cache = createCache(path, locales)
 
   /**
    * Finds the locale for a given text.

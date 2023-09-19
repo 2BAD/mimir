@@ -1,16 +1,22 @@
-import { readTranslationsFromFile } from '~/storage/fs.js'
+import { findTranslationFiles, readTranslationsFromFile } from '~/storage/fs.js'
 import { type Locale, type TranslationsCache, type TranslationsCacheObject } from '~/types.js'
-import { filterPathsByLocale } from '~/utils.js'
+import { filterPathsByLocale, getLocalesFromPaths } from '~/utils.js'
 const debug = (await import('debug')).default('cache')
 
 /**
  * Creates a cache storage for translations.
  *
- * @param translationFilePaths - An array of paths to translation files.
+ * @param cachedPath - A path to translation folder.
  * @param cachedLocales - An array of locales to use.
  * @returns - The translations cache object.
  */
-export const createCache = (translationFilePaths: string[], cachedLocales: Locale[]): TranslationsCache => {
+export const createCache = (cachedPath: string, cachedLocales: Locale[]): TranslationsCache => {
+  const translationFilePaths = findTranslationFiles(cachedPath, cachedLocales)
+
+  if (cachedLocales.length === 0) {
+    cachedLocales = getLocalesFromPaths(translationFilePaths)
+  }
+
   debug(`initializing cache for path '%o' and locales %o`, translationFilePaths, cachedLocales)
   const cache = new Map<string, TranslationsCacheObject>()
   const translationFilePathSet = new Set(translationFilePaths)
