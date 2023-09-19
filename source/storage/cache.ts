@@ -6,30 +6,30 @@ const debug = (await import('debug')).default('cache')
 /**
  * Creates a cache storage for translations.
  *
- * @param cachedPath - A path to translation folder.
- * @param cachedLocales - An array of locales to use.
- * @returns - The translations cache object.
+ * @param pathToTranslationFolder - A path to the translation folder.
+ * @param localesToUse - An array of locales to use.
+ * @returns The translations cache object.
  */
-export const createCache = (cachedPath: string, cachedLocales: Locale[]): TranslationsCache => {
-  const translationFilePaths = findTranslationFiles(cachedPath, cachedLocales)
+export const createCache = (pathToTranslationFolder: string, localesToUse: Locale[]): TranslationsCache => {
+  const foundTranslationFiles = findTranslationFiles(pathToTranslationFolder, localesToUse)
 
-  if (cachedLocales.length === 0) {
-    cachedLocales = getLocalesFromPaths(translationFilePaths)
+  if (localesToUse.length === 0) {
+    localesToUse = getLocalesFromPaths(foundTranslationFiles)
   }
 
-  debug(`initializing cache for path '%o' and locales %o`, translationFilePaths, cachedLocales)
+  debug(`initializing cache for paths '%o' and locales '%o'`, foundTranslationFiles, localesToUse)
   const cache = new Map<string, TranslationsCacheObject>()
-  const translationFilePathSet = new Set(translationFilePaths)
+  const translationFilePathSet = new Set(foundTranslationFiles)
 
   /**
    * Process the paths to translation files and ingest the translations.
    *
-   * @param translationPaths - An array of paths to translation files.
+   * @param pathsToTranslationFiles - An array of paths to translation files.
    * @param locale - The locale of the translation.
    */
-  const process = (translationPaths: string[], locale: Locale): void => {
-    debug('processing %s files for locale %s', translationPaths.length, locale)
-    for (const path of translationPaths) {
+  const process = (pathsToTranslationFiles: string[], locale: Locale): void => {
+    debug(`processing '%s' files for locale '%s'`, pathsToTranslationFiles.length, locale)
+    for (const path of pathsToTranslationFiles) {
       const translations = readTranslationsFromFile(path)
       for (const [key, value] of Object.entries(translations)) {
         ingest(key, value, locale, path)
@@ -57,13 +57,13 @@ export const createCache = (cachedPath: string, cachedLocales: Locale[]): Transl
   /**
    * Refreshes the cache for a specific locale.
    *
-   * @param locale - The locale to refresh.
+   * @param [locale] - The locale to refresh.
    */
   const refresh = (locale?: Locale): void => {
-    const locales: Locale[] = locale ? [locale] : cachedLocales
+    const locales: Locale[] = locale ? [locale] : localesToUse
 
     for (const l of locales) {
-      debug('refreshing cache for locale %s', l)
+      debug(`refreshing cache for locale '%s'`, l)
       const p = filterPathsByLocale([...translationFilePathSet.values()], l)
       process(p, l)
     }
@@ -74,11 +74,11 @@ export const createCache = (cachedPath: string, cachedLocales: Locale[]): Transl
    * If the translations are not available in the cache, it refreshes the cache first.
    *
    * @param key - The key to retrieve translations for.
-   * @param locale - The locale for which to retrieve translations.
-   * @returns - The translations for the specified locale, or null if not found.
+   * @param [locale] - The locale for which to retrieve translations.
+   * @returns The translations for the specified locale, or null if not found.
    */
   const get = (key: string, locale?: Locale): TranslationsCacheObject | null => {
-    debug(`getting translations for '%s' for locale %s`, key, locale)
+    debug(`getting translations for '%s' for locale '%s'`, key, locale)
     if (!cache.has(key)) {
       refresh(locale)
     }
@@ -86,21 +86,26 @@ export const createCache = (cachedPath: string, cachedLocales: Locale[]): Transl
   }
 
   /**
+   * Retrieves all the keys in the cache.
    *
+   * @returns An array of all the keys in the cache.
    */
   const keys = (): string[] => {
     refresh()
-    debug('getting keys from cache %o', cache)
+    debug(`getting keys from cache`)
     return [...cache.keys()]
   }
+
   /**
+   * Retrieves all the values in the cache.
    *
+   * @returns An array of all the values in the cache.
    */
   const values = (): TranslationsCacheObject[] => {
     refresh()
-    debug('getting values from cache %o', cache)
+    debug(`getting values from cache`)
     return [...cache.values()]
   }
 
-  return { get, refresh, keys, values }
+  return { get, keys, values }
 }
