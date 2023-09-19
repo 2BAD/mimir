@@ -2,7 +2,8 @@
 import glob from 'fast-glob'
 import fs from 'node:fs'
 import path from 'node:path'
-import { isErrnoException, type Locale, type Translations } from '~/types.js'
+import { ZodError } from 'zod'
+import { Translations, isErrnoException, type Locale } from '~/types.js'
 const debug = (await import('debug')).default('fs')
 
 // workaround since we cant use named exports from commonjs module
@@ -35,7 +36,7 @@ export const readTranslationsFromFile = (filePath: string): Translations => {
   try {
     debug(`reading file '%s'`, filePath)
     const content = fs.readFileSync(filePath, 'utf-8')
-    translations = JSON.parse(content) as Translations
+    translations = Translations.parse(content)
   } catch (error) {
     if (isErrnoException(error)) {
       switch (error.code) {
@@ -49,6 +50,10 @@ export const readTranslationsFromFile = (filePath: string): Translations => {
           console.error(`An unknown error occurred while reading file: ${error.message}`)
       }
     }
+    if (error instanceof ZodError) {
+      console.error(`An error occurred while parsing translations: ${error.message}`)
+    }
   }
+
   return translations
 }

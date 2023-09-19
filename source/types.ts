@@ -13,7 +13,10 @@ export const Locale = z.nativeEnum(LocaleValues)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Locale = z.infer<typeof Locale>
 
-export type Translations = Record<string, string>
+export const Translations = z.record(z.string())
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type Translations = z.infer<typeof Translations>
+
 export type TranslationsMap = {
   [key in Locale]?: string
 }
