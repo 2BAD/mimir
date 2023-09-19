@@ -60,12 +60,12 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    * @param [locale] - The locale to refresh.
    */
   const refresh = (locale?: Locale): void => {
-    const locales: Locale[] = locale ? [locale] : localesToUse
+    const localesToRefresh: Locale[] = locale ? [locale] : localesToUse
 
-    for (const l of locales) {
+    for (const l of localesToRefresh) {
       debug(`refreshing cache for locale '%s'`, l)
-      const p = filterPathsByLocale([...translationFilePathSet.values()], l)
-      process(p, l)
+      const filteredPaths = filterPathsByLocale([...translationFilePathSet.values()], l)
+      process(filteredPaths, l)
     }
   }
 
