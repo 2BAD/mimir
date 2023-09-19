@@ -19,11 +19,9 @@ export const filterPathsByLocale = (paths: string[], locale: Locale): string[] =
  * @returns - The extracted locale or null if not found.
  */
 export const getLocaleFromPath = (path: string): Locale | null => {
-  const regex = /translation\.([a-z]{2}(_[a-z]{2})?)\.json$/i
+  const regex = /(.*?)translation\.([a-z]{2}(?:_[a-z]{2})?)\.json$/i
 
-  const match = path.match(regex)
-
-  return match ? (match[1] as Locale) : null
+  return regex.test(path) ? (path.replace(regex, '$2') as Locale) : null
 }
 
 /**

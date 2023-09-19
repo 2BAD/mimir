@@ -1,4 +1,24 @@
-import { getLocalesFromPaths } from '~/utils/path.js'
+import { getLocaleFromPath, getLocalesFromPaths } from '~/utils/path.js'
+
+describe('getLocaleFromPath', () => {
+  it('should return the locale when given a valid path', () => {
+    const path = '/path/to/translation.en.json'
+    const result = getLocaleFromPath(path)
+    expect(result).toBe('en')
+  })
+
+  it('should return the locale with country code when given a valid path', () => {
+    const path = '/path/to/translation.pt_BR.json'
+    const result = getLocaleFromPath(path)
+    expect(result).toBe('pt_BR')
+  })
+
+  it('should return null when given an invalid path', () => {
+    const path = '/invalid/path/here.txt'
+    const result = getLocaleFromPath(path)
+    expect(result).toBeNull()
+  })
+})
 
 describe('getLocalesFromPaths', () => {
   it('should return an array of unique locales from an array of paths', () => {
