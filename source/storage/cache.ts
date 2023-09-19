@@ -1,6 +1,6 @@
-import { readTranslationsFromFile } from '~/fs.js'
+import { readTranslationsFromFile } from '~/storage/fs.js'
 import { type Locale, type TranslationsCache, type TranslationsCacheObject } from '~/types.js'
-import { filterPathsByLocale } from './utils.js'
+import { filterPathsByLocale } from '~/utils.js'
 const debug = (await import('debug')).default('cache')
 
 /**

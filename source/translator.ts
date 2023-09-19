@@ -1,5 +1,5 @@
-import { createCache } from '~/cache.js'
-import { findTranslationFiles } from '~/fs.js'
+import { createCache } from '~/storage/cache.js'
+import { findTranslationFiles } from '~/storage/fs.js'
 import { type Locale, type TranslationsCacheObject, type Translator } from '~/types.js'
 import { getLocalesFromPaths } from '~/utils.js'
 
