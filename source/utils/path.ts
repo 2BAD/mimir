@@ -21,7 +21,7 @@ export const filterPathsByLocale = (paths: string[], locale: Locale): string[] =
 export const getLocaleFromPath = (path: string): Locale | null => {
   const regex = /(.*?)translation\.([a-z]{2}(?:_[a-z]{2})?)\.json$/i
 
-  const result = regex.test(path) ? (path.replace(regex, '$2') as Locale) : null
+  const result = regex.test(path) ? path.replace(regex, '$2') : null
   const locale = Locale.safeParse(result)
 
   return locale.success ? locale.data : null
