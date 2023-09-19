@@ -1,4 +1,24 @@
-import { getLocaleFromPath, getLocalesFromPaths } from '~/utils/path.js'
+import { filterPathsByLocale, getLocaleFromPath, getLocalesFromPaths } from '~/utils/path.js'
+
+describe('filterPathsByLocale', () => {
+  it('should filter paths based on locale', () => {
+    const paths = ['translation.en.json', 'translation.fr.json', 'translation.de.json', 'other.file']
+    const locale = 'en'
+
+    const result = filterPathsByLocale(paths, locale)
+
+    expect(result).toStrictEqual(['translation.en.json'])
+  })
+
+  it('should return an empty array if no matches found', () => {
+    const paths = ['file1.json', 'file2.json', 'file3.json']
+    const locale = 'fr'
+
+    const result = filterPathsByLocale(paths, locale)
+
+    expect(result).toStrictEqual([])
+  })
+})
 
 describe('getLocaleFromPath', () => {
   it('should return the locale when given a valid path', () => {
