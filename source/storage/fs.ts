@@ -36,7 +36,7 @@ export const readTranslationsFromFile = (filePath: string): Translations => {
   try {
     debug(`reading file '%s'`, filePath)
     const content = fs.readFileSync(filePath, 'utf-8')
-    translations = Translations.parse(content)
+    translations = Translations.parse(JSON.parse(content))
   } catch (error) {
     if (isErrnoException(error)) {
       switch (error.code) {
