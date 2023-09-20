@@ -1,5 +1,5 @@
 import { createCache } from '~/storage/cache.js'
-import { type Locale, type TranslationsCacheObject, type Translator } from '~/types.js'
+import { type Locale, type TranslationsMap, type Translator } from '~/types.js'
 
 /**
  * Initializes a translator object.
@@ -18,8 +18,8 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * @returns The locale of the text, or null if not found.
    */
   const findLocaleByText = (text: string): string | null => {
-    for (const translationMap of cache.values()) {
-      for (const [locale, translation] of Object.entries(translationMap)) {
+    for (const e of cache.values()) {
+      for (const [locale, translation] of Object.entries(e.translations)) {
         if (translation.includes(text)) return locale
       }
     }
@@ -34,8 +34,8 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * @returns The translated text, or null if not found.
    */
   const getText = (locale: Locale, key: string): string | null => {
-    const translations = cache.get(key, locale)
-    return translations?.[locale] ?? null
+    const e = cache.get(key, locale)
+    return e?.translations?.[locale] ?? null
   }
 
   /**
@@ -44,9 +44,9 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * @param key - The key to lookup translations for.
    * @returns The translations for the key, or null if not found.
    */
-  const getTranslations = (key: string): TranslationsCacheObject | null => {
-    const translations = cache.get(key)
-    return translations
+  const getTranslations = (key: string): TranslationsMap | null => {
+    const e = cache.get(key)
+    return e?.translations ?? null
   }
 
   /**
@@ -66,8 +66,8 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * @returns The path to the translations file if found, or null otherwise.
    */
   const findTranslationsFolder = (key: string): string | null => {
-    const translations = cache.get(key)
-    return translations ? translations.path : null
+    const e = cache.get(key)
+    return e ? e.path : null
   }
 
   return { getText, getKeys, getTranslations, findLocaleByText, findTranslationsFolder }

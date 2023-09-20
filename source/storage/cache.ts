@@ -1,5 +1,5 @@
 import { findTranslationFiles, readTranslationsFromFile } from '~/storage/fs.js'
-import { type Locale, type TranslationsCache, type TranslationsCacheObject } from '~/types.js'
+import { type CacheEntry, type Locale, type TranslationsCache } from '~/types.js'
 import { filterPathsByLocale, getLocalesFromPaths } from '~/utils/path.js'
 const debug = (await import('debug')).default('cache')
 
@@ -18,7 +18,7 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
   }
 
   debug(`initializing cache for paths '%o' and locales '%o'`, foundTranslationFiles, localesToUse)
-  const cache = new Map<string, TranslationsCacheObject>()
+  const cache = new Map<string, CacheEntry>()
   const translationFilePathSet = new Set(foundTranslationFiles)
 
   /**
@@ -47,7 +47,7 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    * @param path - The path to the file where the translation is coming from.
    */
   const ingest = (key: string, value: string, locale: Locale, path: string): void => {
-    const data: TranslationsCacheObject = {
+    const data: CacheEntry = {
       path,
       translations: {}
     }
@@ -82,7 +82,7 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    * @param [locale] - The locale for which to retrieve translations.
    * @returns The translations for the specified locale, or null if not found.
    */
-  const get = (key: string, locale?: Locale): TranslationsCacheObject | null => {
+  const get = (key: string, locale?: Locale): CacheEntry | null => {
     debug(`getting translations for '%s' for locale '%s'`, key, locale)
     if (!cache.has(key)) {
       refresh(locale)
@@ -106,7 +106,7 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    *
    * @returns An array of all the values in the cache.
    */
-  const values = (): TranslationsCacheObject[] => {
+  const values = (): CacheEntry[] => {
     refresh()
     debug(`getting values from cache`)
     return [...cache.values()]

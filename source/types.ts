@@ -21,25 +21,25 @@ export const TranslationsMap = z.record(Locale, z.string())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type TranslationsMap = z.infer<typeof TranslationsMap>
 
-export const TranslationsCacheObject = z.object({
+export const CacheEntry = z.object({
   path: z.string(),
   translations: TranslationsMap
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export type TranslationsCacheObject = z.infer<typeof TranslationsCacheObject>
+export type CacheEntry = z.infer<typeof CacheEntry>
 
 export type Translator = {
   getText: (locale: Locale, key: string) => string | null
   getKeys: () => string[]
-  getTranslations: (key: string) => TranslationsCacheObject | null
+  getTranslations: (key: string) => TranslationsMap | null
   findLocaleByText: (text: string) => string | null
   findTranslationsFolder: (key: string) => string | null
 }
 
 export type TranslationsCache = {
-  get: (key: string, locale?: Locale) => TranslationsCacheObject | null
+  get: (key: string, locale?: Locale) => CacheEntry | null
   keys: () => string[]
-  values: () => TranslationsCacheObject[]
+  values: () => CacheEntry[]
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
