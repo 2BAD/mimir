@@ -7,37 +7,39 @@ import { z } from 'zod'
  *
  * messageId - You can use messageIds instead of typing out messages to avoid retyping errors and prevent outdated messages in different sections of your rule.
  *
- * filename - Optional filename related to the problem.
+ * filePath - Optional filePath related to the problem.
  */
 export const Problem = z.object({
   message: z.string().optional(),
   messageId: z.string().optional(),
-  filename: z.string().optional()
+  filePath: z.string().optional(),
+  key: z.string().optional()
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Problem = z.infer<typeof Problem>
 
-export const Report = z.function().args(Problem).returns(z.void())
+export const ReportFn = z.function().args(Problem).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export type Report = z.infer<typeof Report>
+export type ReportFn = z.infer<typeof ReportFn>
 
 /**
  * The rule context object.
  *
  * id - The rule ID.
  *
- * filename - The filename associated with the translation.
+ * filePath - The filePath associated with the translation.
  *
  * cwd - The cwd option passed to the Translator. It is a path to a directory that should be considered the current working directory.
  *
  * options - The shared settings from the configuration.
  */
 export const Context = z.object({
-  id: z.string(),
-  filename: z.string(),
-  cwd: z.string(),
-  options: z.record(z.string()),
-  report: Report
+  id: z.string().optional(),
+  filePath: z.string().optional(),
+  key: z.string().optional(),
+  cwd: z.string().optional(),
+  options: z.record(z.string()).optional(),
+  report: ReportFn
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Context = z.infer<typeof Context>
