@@ -1,6 +1,6 @@
 import { type Context, type LifeCycleTriggers, type Rule } from '~/rules/utils/types.js'
 
-const MESSAGE_ID = 'key-not-trimmed'
+const MESSAGE_ID = 'key-contains-whitespace'
 const messages = {
   [MESSAGE_ID]: 'Unexpected whitespace character in key.'
 }
