@@ -1,5 +1,4 @@
 import { type Context, type LifeCycleTriggers, type Rule } from '~/rules/utils/types.js'
-import { type TranslationsMap } from '~/types.js'
 
 const MESSAGE_ID = 'no-duplicate-translations'
 const messages = {
@@ -7,10 +6,10 @@ const messages = {
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-const create = (context: Context): LifeCycleTriggers => {
+const create = (): LifeCycleTriggers => {
   // eslint-disable-next-line jsdoc/require-jsdoc
-  const onTranslations = (translations: TranslationsMap): void => {
-    const values = Object.values(translations)
+  const onTranslations = (context: Context): void => {
+    const values = Object.values(context.translations)
     const fm = values.reduce((m, v) => {
       if (m.has(v)) {
         m.set(v, m.get(v) + 1)
@@ -20,7 +19,7 @@ const create = (context: Context): LifeCycleTriggers => {
       return m
     }, new Map())
 
-    const locales: string[] = Object.entries(translations)
+    const locales: string[] = Object.entries(context.translations)
       .filter(([_, t]) => fm.get(t) > 1)
       .map((e) => e[0])
 

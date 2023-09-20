@@ -6,14 +6,14 @@ const messages = {
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-const create = (context: Context): LifeCycleTriggers => {
+const create = (): LifeCycleTriggers => {
   // eslint-disable-next-line jsdoc/require-jsdoc
-  const onKey = (key: string): void => {
+  const onKey = (context: Context): void => {
     const regex = /\s/
 
-    if (regex.test(key)) {
+    if (regex.test(context.key)) {
       context.report({
-        key,
+        key: context.key,
         messageId: MESSAGE_ID
       })
     }

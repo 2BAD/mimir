@@ -6,12 +6,12 @@ const messages = {
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-const create = (context: Context): LifeCycleTriggers => {
+const create = (): LifeCycleTriggers => {
   // eslint-disable-next-line jsdoc/require-jsdoc
-  const onKey = (key: string): void => {
-    if (key === '') {
+  const onKey = (context: Context): void => {
+    if (context.key === '') {
       context.report({
-        key,
+        key: context.key,
         messageId: MESSAGE_ID
       })
     }
