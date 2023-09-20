@@ -27,9 +27,10 @@ export const loadRule = async (modulePath: string): Promise<Rule> => {
 /**
  * Loads rules from a directory.
  *
- * @returns A promise that resolves to a map of rule IDs to loaded rules.
+ * @param [rulesToLoad] - An optional array of rule names to load. If not provided, all rules will be loaded.
+ * @returns A promise that resolves to a map of rule names to their corresponding rule objects.
  */
-export const loadRules = async (): Promise<Record<string, Rule>> => {
+export const loadRules = async (rulesToLoad?: string[]): Promise<Record<string, Rule>> => {
   const rulesDir = new URL('..', import.meta.url)
   debug('searching for rules in: %o', rulesDir.pathname)
 
@@ -39,6 +40,10 @@ export const loadRules = async (): Promise<Record<string, Rule>> => {
 
   const rulePromises = files
     .filter((file) => file.isFile() && file.name.endsWith('.js'))
+    .filter((file) => {
+      const ruleId = path.basename(file.name, '.js')
+      return !rulesToLoad || rulesToLoad.includes(ruleId)
+    })
     .map(async (file) => {
       const ruleId = path.basename(file.name, '.js')
       const rulePath = path.join(file.path, file.name)
@@ -47,10 +52,10 @@ export const loadRules = async (): Promise<Record<string, Rule>> => {
       return [ruleId, await loadRule(rulePath)]
     })
 
-  const rules = await Promise.all(rulePromises)
-  debug('total number of loaded rules: %o', rules.length)
+  const loadedRules = await Promise.all(rulePromises)
+  debug('total number of loaded rules: %o', loadedRules.length)
 
-  const rulesMap = z.record(Rule).parse(Object.fromEntries(rules))
+  const rulesMap = z.record(Rule).parse(Object.fromEntries(loadedRules))
 
   return rulesMap
 }
