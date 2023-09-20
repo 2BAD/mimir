@@ -1,7 +1,7 @@
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { z } from 'zod'
-import { Module, Rule } from './types.js'
+import { Hook, Module, Rule } from './types.js'
 const debug = (await import('debug')).default('loader')
 
 /**
@@ -19,7 +19,8 @@ export const loadRule = async (modulePath: string): Promise<Rule> => {
       ...rule.meta,
       docs: {
         ...rule.meta.docs
-      }
+      },
+      hooks: z.array(Hook).parse(Object.keys(rule.create()))
     },
     create: rule.create
   }

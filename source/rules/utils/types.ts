@@ -56,6 +56,16 @@ export const Create = z.function().args(Context).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Create = z.infer<typeof Create>
 
+const Hooks = {
+  OnKey: 'onKey',
+  OnValue: 'onValue',
+  OnTranslations: 'onTranslations'
+} as const
+
+export const Hook = z.nativeEnum(Hooks)
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type Hook = z.infer<typeof Hook>
+
 export const Rule = z.object({
   meta: z.object({
     type: Type,
@@ -63,7 +73,8 @@ export const Rule = z.object({
       description: z.string(),
       url: z.string().optional()
     }),
-    messages: z.record(z.string())
+    messages: z.record(z.string()),
+    hooks: z.array(Hook).optional()
   }),
   create: Create
 })
