@@ -48,10 +48,15 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    */
   const ingest = (key: string, value: string, locale: Locale, path: string): void => {
     const data: TranslationsCacheObject = {
-      path
+      path,
+      translations: {}
     }
-    data[locale] = value
-    cache.set(key, { ...cache.get(key), ...data })
+    data.translations[locale] = value
+    // @todo: should be replaced with adequate deep merge
+    cache.set(
+      key,
+      Object.assign({}, cache.get(key), { translations: { ...cache.get(key)?.translations, ...data.translations } })
+    )
   }
 
   /**
