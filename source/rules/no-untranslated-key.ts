@@ -1,4 +1,4 @@
-import { type Context, type LifeCycleTriggers, type Rule } from '~/rules/utils/types.js'
+import { type LifeCycleHooks, type Rule, type onKeyHook } from '~/rules/utils/types.js'
 
 const MESSAGE_ID = 'no-untranslated-key'
 const messages = {
@@ -6,9 +6,9 @@ const messages = {
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-const create = (): LifeCycleTriggers => {
+const create = (): LifeCycleHooks => {
   // eslint-disable-next-line jsdoc/require-jsdoc
-  const onKey = (context: Context): void => {
+  const onKey: onKeyHook = (context) => {
     if (context.key === '') {
       context.report({
         key: context.key,

@@ -68,15 +68,22 @@ export const HookFn = z.function().args(Context).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type HookFn = z.infer<typeof HookFn>
 
-export const LifeCycleTriggers = z.object({
-  onKey: HookFn.optional(),
+export const onKeyHook = z
+  .function()
+  .args(Context.required({ key: true }))
+  .returns(z.void())
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type onKeyHook = z.infer<typeof onKeyHook>
+
+export const LifeCycleHooks = z.object({
+  onKey: onKeyHook.optional(),
   onValue: HookFn.optional(),
   onTranslations: HookFn.optional()
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export type LifeCycleTriggers = z.infer<typeof LifeCycleTriggers>
+export type LifeCycleHooks = z.infer<typeof LifeCycleHooks>
 
-export const Create = z.function().args().returns(LifeCycleTriggers)
+export const Create = z.function().args().returns(LifeCycleHooks)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Create = z.infer<typeof Create>
 

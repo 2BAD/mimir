@@ -1,4 +1,4 @@
-import { type Context, type LifeCycleTriggers, type Rule } from '~/rules/utils/types.js'
+import { type LifeCycleHooks, type onKeyHook, type Rule } from '~/rules/utils/types.js'
 
 const MESSAGE_ID = 'key-contains-plural'
 const messages = {
@@ -6,9 +6,9 @@ const messages = {
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-const create = (): LifeCycleTriggers => {
+const create = (): LifeCycleHooks => {
   // eslint-disable-next-line jsdoc/require-jsdoc
-  const onKey = (context: Context): void => {
+  const onKey: onKeyHook = (context) => {
     const regex = /plural/i
 
     if (regex.test(context.key)) {
