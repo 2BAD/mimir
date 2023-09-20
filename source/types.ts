@@ -17,13 +17,16 @@ export const Translations = z.record(z.string())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Translations = z.infer<typeof Translations>
 
-export type TranslationsMap = {
-  [key in Locale]?: string
-}
+export const TranslationsMap = z.record(Locale, z.string())
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type TranslationsMap = z.infer<typeof TranslationsMap>
 
-export type TranslationsCacheObject = TranslationsMap & {
-  path: string
-}
+export const TranslationsCacheObject = z.object({
+  path: z.string(),
+  translations: TranslationsMap
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type TranslationsCacheObject = z.infer<typeof TranslationsCacheObject>
 
 export type Translator = {
   getText: (locale: Locale, key: string) => string | null
