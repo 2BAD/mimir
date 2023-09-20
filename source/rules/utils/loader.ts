@@ -11,6 +11,7 @@ const debug = (await import('debug')).default('loader')
  * @returns A promise that resolves with the loaded rule.
  */
 export const loadRule = async (modulePath: string): Promise<Rule> => {
+  // @todo: should wrap in try catch and improve error messages for lifecycle signature
   const { rule } = Module.parse(await import(modulePath))
 
   return {
@@ -25,7 +26,7 @@ export const loadRule = async (modulePath: string): Promise<Rule> => {
 }
 
 /**
- * Loads rules from a directory.
+ * Load rule modules from directory.
  *
  * @param [rulesToLoad] - An optional array of rule names to load. If not provided, all rules will be loaded.
  * @returns A promise that resolves to a map of rule names to their corresponding rule objects.
