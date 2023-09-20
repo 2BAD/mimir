@@ -1,28 +1,39 @@
-import { containsIdenticalTranslation } from '~/rules.js'
-import { type Translator } from '~/types.js'
+/* eslint-disable jsdoc/require-jsdoc */
+import { loadRules } from '~/rules/utils/loader.js'
+import { type Translator, type Validator } from '~/types.js'
+import { initRunner } from './rules/utils/runner.js'
+import { type Problem } from './rules/utils/types.js'
 
-// eslint-disable-next-line jsdoc/require-jsdoc
-export const validateTranslations = (
-  translator: Translator,
-  keys?: string[]
-  // rules: string[]
-  // targetLocale?: string
-): Array<Record<string, string>> => {
-  const errors: Array<Record<string, string>> = []
+export const initValidator = async (translator: Translator, ruleIds?: string[]): Promise<Validator> => {
+  const rules = await loadRules(ruleIds)
 
-  if (keys === undefined || keys?.length === 0) {
-    keys = translator.getKeys()
-  }
+  const ruleRunner = initRunner(rules)
 
-  for (const key of keys) {
-    const translations = translator.getTranslations(key)
-    if (translations !== null) {
-      const result = containsIdenticalTranslation(translations)
-      if (result !== false) errors.push({ ...result, key })
-      // add some more tests below in a similar fashion
-      // ...
+  const validate = (keys?: string[]): Problem[] => {
+    if (keys === undefined || keys?.length === 0) {
+      keys = translator.getKeys()
     }
+
+    for (const key of keys) {
+      // run onKey
+      ruleRunner.run('onKey', { key })
+
+      const translations = translator.getTranslations(key)
+      if (translations !== null) {
+        // run OnTranslations
+        ruleRunner.run('OnTranslations', { key, translations })
+
+        for (const value of Object.values(translations)) {
+          // run OnValues
+          ruleRunner.run('OnValue', { key, translations, value })
+        }
+      }
+    }
+
+    return ruleRunner.getProblems()
   }
 
-  return errors
+  return {
+    validate
+  }
 }

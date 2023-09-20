@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { type Problem } from '~/rules/utils/types.js'
 
 export const LocaleValues = {
   English: 'en',
@@ -28,6 +29,12 @@ export const CacheEntry = z.object({
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type CacheEntry = z.infer<typeof CacheEntry>
 
+export type TranslationsCache = {
+  get: (key: string, locale?: Locale) => CacheEntry | null
+  keys: () => string[]
+  values: () => CacheEntry[]
+}
+
 export type Translator = {
   getText: (locale: Locale, key: string) => string | null
   getKeys: () => string[]
@@ -36,10 +43,8 @@ export type Translator = {
   findTranslationsFolder: (key: string) => string | null
 }
 
-export type TranslationsCache = {
-  get: (key: string, locale?: Locale) => CacheEntry | null
-  keys: () => string[]
-  values: () => CacheEntry[]
+export type Validator = {
+  validate: (keys?: string[]) => Problem[]
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
