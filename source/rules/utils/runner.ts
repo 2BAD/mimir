@@ -2,11 +2,13 @@
 import { loadRules } from '~/rules/utils/loader.js'
 import {
   LifeCycleHooks,
+  type BaseContext,
   type Context,
-  type ContextParameters,
+  type ContextParams,
   type HookType,
   type Problem,
   type Runner,
+  type RunnerCreateContextFn,
   type RunnerGetProblemsFn,
   type RunnerInitFn,
   type RunnerTriggerFn
@@ -28,7 +30,7 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
     })
   })
 
-  const trigger: RunnerTriggerFn = (hook: HookType, contextParams: ContextParameters): void => {
+  const trigger: RunnerTriggerFn = (hook: HookType, contextParams: BaseContext): void => {
     const triggered = rulesMap.get(hook)
     if (triggered) {
       triggered.forEach((rule) => {
@@ -40,10 +42,9 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
     }
   }
 
-  const createContext = (params: ContextParameters): Context => {
+  const createContext: RunnerCreateContextFn = (params: ContextParams): Context => {
     return {
       ...params,
-      // eslint-disable-next-line jsdoc/require-jsdoc
       report: (problem: Problem): void => {
         problems.push(problem)
       }

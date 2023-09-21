@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { TranslationsMap } from '~/types.js'
 
 /**
  * Represents a report object.
@@ -22,25 +23,47 @@ export const ReportFn = z.function().args(Problem).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type ReportFn = z.infer<typeof ReportFn>
 
-/**
- * The rule context object.
- *
- * id - The rule ID.
- *
- * filePath - The filePath associated with the translation.
- *
- * cwd - The cwd option passed to the Translator. It is a path to a directory that should be considered the current working directory.
- *
- * options - The shared settings from the configuration.
- */
-export const Context = z.object({
-  id: z.string().optional(),
-  filePath: z.string().optional(),
-  key: z.string().optional(),
-  cwd: z.string().optional(),
-  options: z.record(z.string()).optional(),
+export const BaseContext = z.object({
+  filePath: z.string()
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type BaseContext = z.infer<typeof BaseContext>
+
+export const OnKeyContext = BaseContext.and(
+  z.object({
+    key: z.string()
+  })
+)
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type OnKeyContext = z.infer<typeof OnKeyContext>
+
+export const OnTranslationsContext = OnKeyContext.and(
+  z.object({
+    translations: TranslationsMap
+  })
+)
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type OnTranslationsContext = z.infer<typeof OnTranslationsContext>
+
+export const OnValueContext = OnTranslationsContext.and(
+  z.object({
+    value: z.string()
+  })
+)
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type OnValueContext = z.infer<typeof OnValueContext>
+
+export const ReportContext = z.object({
   report: ReportFn
 })
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type ReportContext = z.infer<typeof ReportContext>
+
+export const ContextParams = z.union([OnKeyContext, OnTranslationsContext, OnValueContext])
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type ContextParams = z.infer<typeof ContextParams>
+
+export const Context = ContextParams.and(ReportContext)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Context = z.infer<typeof Context>
 
@@ -68,10 +91,7 @@ export const HookFn = z.function().args(Context).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type HookFn = z.infer<typeof HookFn>
 
-export const onKeyHook = z
-  .function()
-  .args(Context.required({ key: true }))
-  .returns(z.void())
+export const onKeyHook = z.function().args(OnKeyContext.and(ReportContext)).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type onKeyHook = z.infer<typeof onKeyHook>
 
@@ -118,9 +138,13 @@ export const LoaderLoadRulesFn = z.function().args(z.array(z.string()).optional(
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type LoaderLoadRulesFn = z.infer<typeof LoaderLoadRulesFn>
 
-export const RunnerTriggerFn = z.function().args(HookType, ContextParameters).returns(z.void())
+export const RunnerTriggerFn = z.function().args(HookType, ContextParams).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type RunnerTriggerFn = z.infer<typeof RunnerTriggerFn>
+
+export const RunnerCreateContextFn = z.function().args(ContextParams).returns(Context)
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type RunnerCreateContextFn = z.infer<typeof RunnerCreateContextFn>
 
 export const RunnerGetProblemsFn = z.function().args().returns(z.array(Problem))
 // eslint-disable-next-line @typescript-eslint/no-redeclare
