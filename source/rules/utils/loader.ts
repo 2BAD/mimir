@@ -1,7 +1,14 @@
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { z } from 'zod'
-import { HookType, Module, Rule } from './types.js'
+import {
+  HookType,
+  Module,
+  RulesMap,
+  type LoaderLoadRuleFn,
+  type LoaderLoadRulesFn,
+  type Rule
+} from '~/rules/utils/types.js'
 const debug = (await import('debug')).default('loader')
 
 /**
@@ -10,7 +17,7 @@ const debug = (await import('debug')).default('loader')
  * @param modulePath - The path to the module.
  * @returns A promise that resolves with the loaded rule.
  */
-export const loadRule = async (modulePath: string): Promise<Rule> => {
+export const loadRule: LoaderLoadRuleFn = async (modulePath: string): Promise<Rule> => {
   // @todo: should wrap in try catch and improve error messages for lifecycle signature
   const { rule } = Module.parse(await import(modulePath))
 
@@ -32,7 +39,7 @@ export const loadRule = async (modulePath: string): Promise<Rule> => {
  * @param [rulesToLoad] - An optional array of rule names to load. If not provided, all rules will be loaded.
  * @returns A promise that resolves to a map of rule names to their corresponding rule objects.
  */
-export const loadRules = async (rulesToLoad?: string[]): Promise<Record<string, Rule>> => {
+export const loadRules: LoaderLoadRulesFn = async (rulesToLoad?: string[]): Promise<RulesMap> => {
   const rulesDir = new URL('..', import.meta.url)
   debug('searching for rules in: %o', rulesDir.pathname)
 
@@ -57,7 +64,7 @@ export const loadRules = async (rulesToLoad?: string[]): Promise<Record<string, 
   const loadedRules = await Promise.all(rulePromises)
   debug('total number of loaded rules: %o', loadedRules.length)
 
-  const rulesMap = z.record(Rule).parse(Object.fromEntries(loadedRules))
+  const rulesMap = RulesMap.parse(Object.fromEntries(loadedRules))
 
   return rulesMap
 }

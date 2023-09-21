@@ -110,6 +110,14 @@ export const RulesMap = z.record(Rule)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type RulesMap = z.infer<typeof RulesMap>
 
+export const LoaderLoadRuleFn = z.function().args(z.string()).returns(z.promise(Rule))
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type LoaderLoadRuleFn = z.infer<typeof LoaderLoadRuleFn>
+
+export const LoaderLoadRulesFn = z.function().args(z.array(z.string()).optional()).returns(z.promise(RulesMap))
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type LoaderLoadRulesFn = z.infer<typeof LoaderLoadRulesFn>
+
 export const RunnerTriggerFn = z.function().args(HookType, ContextParameters).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type RunnerTriggerFn = z.infer<typeof RunnerTriggerFn>
