@@ -4,7 +4,7 @@ import {
   LifeCycleHooks,
   type Context,
   type ContextParameters,
-  type Hook,
+  type HookType,
   type Problem,
   type Runner,
   type RunnerGetProblemsFn,
@@ -14,7 +14,7 @@ import {
 
 export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runner> => {
   const rules = await loadRules(ruleIds)
-  const rulesMap = new Map<Hook, LifeCycleHooks[]>()
+  const rulesMap = new Map<HookType, LifeCycleHooks[]>()
   const problems: Problem[] = []
 
   // Initialize rules and store them in a map with hook as key
@@ -28,7 +28,7 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
     })
   })
 
-  const trigger: RunnerTriggerFn = (hook: Hook, contextParams: ContextParameters): void => {
+  const trigger: RunnerTriggerFn = (hook: HookType, contextParams: ContextParameters): void => {
     const triggered = rulesMap.get(hook)
     if (triggered) {
       triggered.forEach((rule) => {

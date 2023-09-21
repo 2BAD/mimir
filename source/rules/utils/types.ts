@@ -44,25 +44,25 @@ export const Context = z.object({
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Context = z.infer<typeof Context>
 
-const Types = {
+const RuleTypes = {
   Problem: 'problem',
   Suggestion: 'suggestion',
   Notice: 'notice'
 } as const
 
-const Type = z.nativeEnum(Types)
+const RuleType = z.nativeEnum(RuleTypes)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-type Type = z.infer<typeof Type>
+type RuleType = z.infer<typeof RuleType>
 
-const Hooks = {
+const HookTypes = {
   OnKey: 'onKey',
   OnValue: 'onValue',
   OnTranslations: 'onTranslations'
 } as const
 
-export const Hook = z.nativeEnum(Hooks)
+export const HookType = z.nativeEnum(HookTypes)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export type Hook = z.infer<typeof Hook>
+export type HookType = z.infer<typeof HookType>
 
 export const HookFn = z.function().args(Context).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -89,13 +89,13 @@ export type RuleInitFn = z.infer<typeof RuleInitFn>
 
 export const Rule = z.object({
   meta: z.object({
-    type: Type,
+    type: RuleType,
     docs: z.object({
       description: z.string(),
       url: z.string().optional()
     }),
     messages: z.record(z.string()),
-    hooks: z.array(Hook).optional()
+    hooks: z.array(HookType).optional()
   }),
   create: RuleInitFn
 })
@@ -110,7 +110,7 @@ export const RulesMap = z.record(Rule)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type RulesMap = z.infer<typeof RulesMap>
 
-export const RunnerTriggerFn = z.function().args(Hook, ContextParameters).returns(z.void())
+export const RunnerTriggerFn = z.function().args(HookType, ContextParameters).returns(z.void())
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type RunnerTriggerFn = z.infer<typeof RunnerTriggerFn>
 
