@@ -44,7 +44,7 @@ export type Translator = {
 }
 
 export type Validator = {
-  validate: (keys?: string[]) => Problem[]
+  run: (keys?: string[]) => Problem[]
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
