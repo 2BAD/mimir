@@ -83,9 +83,9 @@ export const LifeCycleHooks = z.object({
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type LifeCycleHooks = z.infer<typeof LifeCycleHooks>
 
-export const Create = z.function().args().returns(LifeCycleHooks)
+export const RuleInitFn = z.function().args().returns(LifeCycleHooks)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export type Create = z.infer<typeof Create>
+export type RuleInitFn = z.infer<typeof RuleInitFn>
 
 export const Rule = z.object({
   meta: z.object({
@@ -97,7 +97,7 @@ export const Rule = z.object({
     messages: z.record(z.string()),
     hooks: z.array(Hook).optional()
   }),
-  create: Create
+  create: RuleInitFn
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Rule = z.infer<typeof Rule>
@@ -109,3 +109,22 @@ export type Module = z.infer<typeof Module>
 export const RulesMap = z.record(Rule)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type RulesMap = z.infer<typeof RulesMap>
+
+export const RunnerTriggerFn = z.function().args(Hook, ContextParameters).returns(z.void())
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type RunnerTriggerFn = z.infer<typeof RunnerTriggerFn>
+
+export const RunnerGetProblemsFn = z.function().args().returns(z.array(Problem))
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type RunnerGetProblemsFn = z.infer<typeof RunnerGetProblemsFn>
+
+export const Runner = z.object({
+  trigger: RunnerTriggerFn,
+  getProblems: RunnerGetProblemsFn
+})
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type Runner = z.infer<typeof Runner>
+
+export const RunnerInitFn = z.function().args(z.array(z.string()).optional()).returns(z.promise(Runner))
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type RunnerInitFn = z.infer<typeof RunnerInitFn>
