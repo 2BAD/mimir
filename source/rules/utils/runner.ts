@@ -2,7 +2,13 @@
 import { loadRules } from '~/rules/utils/loader.js'
 import {
   LifeCycleHooks,
-  type BaseContext,
+  OnKeyContext,
+  OnKeyHook,
+  OnTranslationsContext,
+  OnTranslationsHook,
+  OnValueContext,
+  OnValueHook,
+  ReportContext,
   type Context,
   type ContextParams,
   type HookType,
@@ -30,13 +36,24 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
     })
   })
 
-  const trigger: RunnerTriggerFn = (hook: HookType, contextParams: BaseContext): void => {
+  const trigger: RunnerTriggerFn = (hook: HookType, contextParams: ContextParams): void => {
     const triggered = rulesMap.get(hook)
     if (triggered) {
       triggered.forEach((rule) => {
         if (rule[hook] !== undefined && typeof rule[hook] === 'function') {
-          const c = createContext(contextParams)
-          rule[hook](с)
+          if (hook === 'onKey') {
+            const hookFn = OnKeyHook.parse(rule[hook])
+            const context = OnKeyContext.and(ReportContext).parse(createContext(contextParams))
+            hookFn(context)
+          } else if (hook === 'onTranslations') {
+            const hookFn = OnTranslationsHook.parse(rule[hook])
+            const context = OnTranslationsContext.and(ReportContext).parse(createContext(contextParams))
+            hookFn(context)
+          } else if (hook === 'onValue') {
+            const hookFn = OnValueHook.parse(rule[hook])
+            const context = OnValueContext.and(ReportContext).parse(createContext(contextParams))
+            hookFn(context)
+          }
         }
       })
     }
