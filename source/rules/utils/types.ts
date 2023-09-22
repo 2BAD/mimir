@@ -5,7 +5,8 @@ export const Problem = z.object({
   message: z.string().optional(),
   messageId: z.string().optional(),
   filePath: z.string().optional(),
-  key: z.string().optional()
+  key: z.string().optional(),
+  value: z.string().optional()
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Problem = z.infer<typeof Problem>
