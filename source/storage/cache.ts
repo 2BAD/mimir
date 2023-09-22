@@ -28,7 +28,7 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    * @param locale - The locale of the translation.
    */
   const process = (pathsToTranslationFiles: string[], locale: Locale): void => {
-    debug(`processing '%s' files for locale '%s'`, pathsToTranslationFiles.length, locale)
+    debug(`%o - processed files: %o`, locale, pathsToTranslationFiles.length)
     for (const path of pathsToTranslationFiles) {
       const translations = readTranslationsFromFile(path)
       for (const [key, value] of Object.entries(translations)) {
@@ -73,9 +73,10 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
     const localesToRefresh: Locale[] = locale ? [locale] : localesToUse
 
     for (const l of localesToRefresh) {
-      debug(`refreshing cache for locale '%s'`, l)
+      debug(`%o - refreshing`, l)
       const filteredPaths = filterPathsByLocale([...translationFilePathSet.values()], l)
       process(filteredPaths, l)
+      debug(`%o - ingested keys: %o`, l, cache.size)
     }
   }
 
@@ -88,7 +89,7 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    * @returns The translations for the specified locale, or null if not found.
    */
   const get = (key: string, locale?: Locale): CacheEntry | null => {
-    debug(`getting translations for '%s' for locale '%s'`, key, locale)
+    debug(`getting translations for: %o locale: %o`, key, locale)
     if (!cache.has(key)) {
       refresh(locale)
     }
