@@ -62,7 +62,7 @@ export const loadRules: LoaderLoadRulesFn = async (rulesToLoad?: string[]): Prom
     })
 
   const loadedRules = await Promise.all(rulePromises)
-  debug('total number of loaded rules: %o', loadedRules.length)
+  debug('rules loaded: %o', loadedRules.length)
 
   const rulesMap = RulesMap.parse(Object.fromEntries(loadedRules))
 

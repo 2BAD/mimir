@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { loadRules } from '~/rules/utils/loader.js'
 import {
+  HookType,
   LifeCycleHooks,
   OnKeyContext,
   OnKeyHook,
@@ -11,7 +12,6 @@ import {
   ReportContext,
   type Context,
   type ContextParams,
-  type HookType,
   type Problem,
   type Runner,
   type RunnerCreateContextFn,
@@ -19,8 +19,11 @@ import {
   type RunnerInitFn,
   type RunnerTriggerFn
 } from '~/rules/utils/types.js'
+const debug = (await import('debug')).default('runner')
 
 export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runner> => {
+  debug(`initializing rule runner with following rules '%o'`, ruleIds)
+
   const rules = await loadRules(ruleIds)
   const rulesMap = new Map<HookType, LifeCycleHooks[]>()
   const problems: Problem[] = []
@@ -36,22 +39,27 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
     })
   })
 
-  const trigger: RunnerTriggerFn = (hook: HookType, contextParams: ContextParams): void => {
+  for (const hook of HookType.options) {
+    debug(`rules initialized for hook %o: %o`, hook, rulesMap.get(hook)?.length ?? 0)
+  }
+
+  const trigger: RunnerTriggerFn = (hook: HookType, params: ContextParams): void => {
     const triggered = rulesMap.get(hook)
     if (triggered) {
+      debug(`triggered lifecycle hook: %o`, hook)
       triggered.forEach((rule) => {
         if (rule[hook] !== undefined && typeof rule[hook] === 'function') {
           if (hook === 'onKey') {
             const hookFn = OnKeyHook.parse(rule[hook])
-            const context = OnKeyContext.and(ReportContext).parse(createContext(contextParams))
+            const context = OnKeyContext.and(ReportContext).parse(createContext(params))
             hookFn(context)
           } else if (hook === 'onTranslations') {
             const hookFn = OnTranslationsHook.parse(rule[hook])
-            const context = OnTranslationsContext.and(ReportContext).parse(createContext(contextParams))
+            const context = OnTranslationsContext.and(ReportContext).parse(createContext(params))
             hookFn(context)
           } else if (hook === 'onValue') {
             const hookFn = OnValueHook.parse(rule[hook])
-            const context = OnValueContext.and(ReportContext).parse(createContext(contextParams))
+            const context = OnValueContext.and(ReportContext).parse(createContext(params))
             hookFn(context)
           }
         }
@@ -60,6 +68,7 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
   }
 
   const createContext: RunnerCreateContextFn = (params: ContextParams): Context => {
+    debug(`creating context using parameters: %o`, params)
     return {
       ...params,
       report: (problem: Problem): void => {
