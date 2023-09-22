@@ -32,6 +32,7 @@ export const initValidator = async (translator: Translator, ruleIds?: string[]):
         // run onKey
         ruleRunner.trigger('onKey', { filePath, key })
 
+        debug('requesting translations for key: %o', key)
         const translations = translator.getTranslations(key)
         if (translations !== null) {
           // run OnTranslations
