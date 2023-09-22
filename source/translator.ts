@@ -1,5 +1,6 @@
 import { createCache } from '~/storage/cache.js'
 import { type Locale, type TranslationsMap, type Translator } from '~/types.js'
+const debug = (await import('debug')).default('translator')
 
 /**
  * Initializes a translator object.
@@ -34,6 +35,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * @returns The translated text, or null if not found.
    */
   const getText = (locale: Locale, key: string): string | null => {
+    debug('requesting translation text for key: %o locale: %o', key, locale)
     const e = cache.get(key, locale)
     return e?.translations?.[locale] ?? null
   }
@@ -45,6 +47,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * @returns The translations for the key, or null if not found.
    */
   const getTranslations = (key: string): TranslationsMap | null => {
+    debug('requesting translations for key: %o', key)
     const e = cache.get(key)
     return e?.translations ?? null
   }
@@ -55,6 +58,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * @returns The array of keys in the cache.
    */
   const getKeys = (): string[] => {
+    debug('requesting all keys from cache')
     const keys = [...cache.keys()]
     return keys
   }
@@ -66,6 +70,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
    * @returns The path to the translations file if found, or null otherwise.
    */
   const findTranslationsFolder = (key: string): string | null => {
+    debug('requesting translation file path containing key: %o', key)
     const e = cache.get(key)
     return e ? e.path : null
   }
