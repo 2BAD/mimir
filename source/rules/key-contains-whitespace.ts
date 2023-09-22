@@ -8,12 +8,13 @@ const messages = {
 // eslint-disable-next-line jsdoc/require-jsdoc
 const create = (): LifeCycleHooks => {
   // eslint-disable-next-line jsdoc/require-jsdoc
-  const onKey: OnKeyHook = (context) => {
+  const onKey: OnKeyHook = ({ report, filePath, key }) => {
     const regex = /\s/
 
-    if (regex.test(context.key)) {
-      context.report({
-        key: context.key,
+    if (regex.test(key)) {
+      report({
+        filePath,
+        key,
         messageId: MESSAGE_ID
       })
     }

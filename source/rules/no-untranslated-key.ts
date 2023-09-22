@@ -8,10 +8,11 @@ const messages = {
 // eslint-disable-next-line jsdoc/require-jsdoc
 const create = (): LifeCycleHooks => {
   // eslint-disable-next-line jsdoc/require-jsdoc
-  const onKey: OnKeyHook = (context) => {
-    if (context.key === '') {
-      context.report({
-        key: context.key,
+  const onKey: OnKeyHook = ({ report, filePath, key }) => {
+    if (key === '') {
+      report({
+        filePath,
+        key,
         messageId: MESSAGE_ID
       })
     }
