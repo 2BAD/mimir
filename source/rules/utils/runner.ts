@@ -72,6 +72,7 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
     return {
       ...params,
       report: (problem: Problem): void => {
+        debug(`rule reported a problem: %o`, problem)
         problems.push(problem)
       }
     }
