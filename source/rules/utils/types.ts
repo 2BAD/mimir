@@ -68,13 +68,9 @@ const RuleType = z.nativeEnum(RuleTypes)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 type RuleType = z.infer<typeof RuleType>
 
-const HookTypes = {
-  OnKey: 'onKey',
-  OnTranslations: 'onTranslations',
-  OnValue: 'onValue'
-} as const
+export const HookTypes = ['onKey', 'onTranslations', 'onValue'] as const
 
-export const HookType = z.nativeEnum(HookTypes)
+export const HookType = z.enum(HookTypes)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type HookType = z.infer<typeof HookType>
 
