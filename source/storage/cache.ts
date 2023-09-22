@@ -55,7 +55,12 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
     // @todo: should be replaced with adequate deep merge
     cache.set(
       key,
-      Object.assign({}, cache.get(key), { translations: { ...cache.get(key)?.translations, ...data.translations } })
+      Object.assign(
+        {},
+        { ...data },
+        { ...cache.get(key) },
+        { translations: { ...cache.get(key)?.translations, ...data.translations } }
+      )
     )
   }
 
@@ -97,7 +102,7 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    */
   const keys = (): string[] => {
     refresh()
-    debug(`getting keys from cache`)
+    debug(`getting all keys from cache`)
     return [...cache.keys()]
   }
 
@@ -108,7 +113,7 @@ export const createCache = (pathToTranslationFolder: string, localesToUse: Local
    */
   const values = (): CacheEntry[] => {
     refresh()
-    debug(`getting values from cache`)
+    debug(`getting all values from cache`)
     return [...cache.values()]
   }
 
