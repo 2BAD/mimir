@@ -1,15 +1,6 @@
 import { z } from 'zod'
 import { TranslationsMap } from '~/types.js'
 
-/**
- * Represents a report object.
- *
- * message - The problem message.
- *
- * messageId - You can use messageIds instead of typing out messages to avoid retyping errors and prevent outdated messages in different sections of your rule.
- *
- * filePath - Optional filePath related to the problem.
- */
 export const Problem = z.object({
   message: z.string().optional(),
   messageId: z.string().optional(),
@@ -79,26 +70,34 @@ type RuleType = z.infer<typeof RuleType>
 
 const HookTypes = {
   OnKey: 'onKey',
-  OnValue: 'onValue',
-  OnTranslations: 'onTranslations'
+  OnTranslations: 'onTranslations',
+  OnValue: 'onValue'
 } as const
 
 export const HookType = z.nativeEnum(HookTypes)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type HookType = z.infer<typeof HookType>
 
-export const HookFn = z.function().args(Context).returns(z.void())
+export const OnKeyHook = z.function().args(OnKeyContext.and(ReportContext)).returns(z.void())
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type OnKeyHook = z.infer<typeof OnKeyHook>
+
+export const OnTranslationsHook = z.function().args(OnTranslationsContext.and(ReportContext)).returns(z.void())
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type OnTranslationsHook = z.infer<typeof OnTranslationsHook>
+
+export const OnValueHook = z.function().args(OnValueContext.and(ReportContext)).returns(z.void())
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type OnValueHook = z.infer<typeof OnValueHook>
+
+export const HookFn = z.union([OnKeyHook, OnTranslationsHook, OnValueHook])
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type HookFn = z.infer<typeof HookFn>
 
-export const onKeyHook = z.function().args(OnKeyContext.and(ReportContext)).returns(z.void())
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export type onKeyHook = z.infer<typeof onKeyHook>
-
 export const LifeCycleHooks = z.object({
-  onKey: onKeyHook.optional(),
-  onValue: HookFn.optional(),
-  onTranslations: HookFn.optional()
+  onKey: OnKeyHook.optional(),
+  onTranslations: OnTranslationsHook.optional(),
+  onValue: OnValueHook.optional()
 })
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type LifeCycleHooks = z.infer<typeof LifeCycleHooks>

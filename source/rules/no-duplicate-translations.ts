@@ -1,4 +1,4 @@
-import { type Context, type LifeCycleTriggers, type Rule } from '~/rules/utils/types.js'
+import { type Context, type Rule } from '~/rules/utils/types.js'
 
 const MESSAGE_ID = 'no-duplicate-translations'
 const messages = {
@@ -6,7 +6,7 @@ const messages = {
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-const create = (): LifeCycleTriggers => {
+const create = (): LifeCycleHooks => {
   // eslint-disable-next-line jsdoc/require-jsdoc
   const onTranslations = (context: Context): void => {
     const values = Object.values(context.translations)
