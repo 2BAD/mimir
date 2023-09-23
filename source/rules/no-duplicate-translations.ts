@@ -1,4 +1,4 @@
-import { type Context, type Rule } from '~/rules/utils/types.js'
+import { type LifeCycleHooks, type OnTranslationsHook, type Rule } from '~/rules/utils/types.js'
 
 const MESSAGE_ID = 'no-duplicate-translations'
 const messages = {
@@ -8,8 +8,8 @@ const messages = {
 // eslint-disable-next-line jsdoc/require-jsdoc
 const create = (): LifeCycleHooks => {
   // eslint-disable-next-line jsdoc/require-jsdoc
-  const onTranslations = (context: Context): void => {
-    const values = Object.values(context.translations)
+  const onTranslations: OnTranslationsHook = ({ report, filePath, key, translations }) => {
+    const values = Object.values(translations)
     const fm = values.reduce((m, v) => {
       if (m.has(v)) {
         m.set(v, m.get(v) + 1)
@@ -19,16 +19,15 @@ const create = (): LifeCycleHooks => {
       return m
     }, new Map())
 
-    const locales: string[] = Object.entries(context.translations)
+    const locales: string[] = Object.entries(translations)
       .filter(([_, t]) => fm.get(t) > 1)
       .map((e) => e[0])
 
     if (locales.length > 0) {
-      context.report({
-        // key,
+      report({
+        filePath,
+        key,
         messageId: MESSAGE_ID,
-        // path: translations.path,
-        // translation: translations[locales[0] as Locale] as string,
         message: `Following locales have the same translation: ${locales.toString()}`
       })
     }
