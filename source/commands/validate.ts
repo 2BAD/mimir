@@ -12,25 +12,25 @@ export default class Validate extends Command {
 
   static override flags = {
     path: Flags.string({ char: 'p', summary: 'path to translation folder', default: process.cwd() }),
-    rules: Flags.string({
-      char: 'r',
-      summary: 'list of rules to run',
-      parse: async (input) => {
-        let rules = input.split(', ')
-        if (rules.length === 1) {
-          rules = input.split(',')
-        }
-        return rules
-      }
-    })
+    rules: Flags.string({ char: 'r', summary: 'list of rules to run' })
   }
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(Validate)
 
-    const translator = initTranslator(flags.path)
-    const validator = await initValidator(translator, flags.rules)
+    const parseFlags = (input: string): string[] => {
+      let rules = input.split(', ')
+      if (rules.length === 1) {
+        rules = input.split(',')
+      }
+      return rules
+    }
 
-    this.log(validator.run())
+    const translator = initTranslator(flags.path)
+    const validator = await initValidator(translator, parseFlags(flags.rules))
+
+    const report = JSON.stringify(validator.run())
+
+    this.log(report)
   }
 }
