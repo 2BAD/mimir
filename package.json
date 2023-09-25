@@ -1,6 +1,6 @@
 {
-  "name": "mimir",
-  "version": "1.0.0",
+  "name": "@mirohq-internal/mimir",
+  "version": "0.0.0",
   "description": "",
   "keywords": [],
   "homepage": "https://github.com/grasword/mimir#readme",
@@ -94,6 +94,9 @@
   },
   "volta": {
     "node": "20.7.0"
+  },
+  "publishConfig": {
+    "registry": "https://artifactory.tools.devrtb.com/artifactory/api/npm/npm-local/"
   },
   "oclif": {
     "commands": "./build/commands"
