@@ -18,10 +18,13 @@ export default class Validate extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(Validate)
 
-    const parseFlags = (input: string): string[] => {
-      let rules = input.split(', ')
-      if (rules.length === 1) {
-        rules = input.split(',')
+    const parseFlags = (input?: string): string[] | undefined => {
+      let rules
+      if (input !== undefined) {
+        rules = input.split(', ')
+        if (rules.length === 1) {
+          rules = input.split(',')
+        }
       }
       return rules
     }
@@ -29,7 +32,7 @@ export default class Validate extends Command {
     const translator = initTranslator(flags.path)
     const validator = await initValidator(translator, parseFlags(flags.rules))
 
-    const report = JSON.stringify(validator.run())
+    const report = JSON.stringify(validator.run(), null, 2)
 
     this.log(report)
   }
