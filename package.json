@@ -13,12 +13,12 @@
   },
   "license": "MIT",
   "author": "Oleh Zhmaiev (https://github.com/grasword)",
-  "bin": {
-    "mimir": "./bin/run.mjs"
-  },
   "type": "module",
   "exports": "./build/index.js",
   "typings": "./build/index.d.ts",
+  "bin": {
+    "mimir": "./bin/run.mjs"
+  },
   "files": [
     "bin",
     "build"
