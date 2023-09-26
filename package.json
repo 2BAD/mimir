@@ -49,7 +49,6 @@
     "trailingComma": "none"
   },
   "dependencies": {
-    "@e965/xlsx": "0.20.0",
     "@oclif/core": "3.0.0-beta.16",
     "@oclif/plugin-help": "5.2.19",
     "@oclif/plugin-plugins": "3.8.0",
