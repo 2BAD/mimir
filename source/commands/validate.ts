@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable jsdoc/require-jsdoc */
 import { Command, Flags } from '@oclif/core'
+import * as format from '~/formatters/index.js'
 import { initTranslator } from '~/translator.js'
 import { initValidator } from '~/validator.js'
 
@@ -12,7 +13,12 @@ export default class Validate extends Command {
 
   static override flags = {
     path: Flags.string({ char: 'p', summary: 'path to translation folder', default: process.cwd() }),
-    rules: Flags.string({ char: 'r', summary: 'list of rules to run' })
+    rules: Flags.string({ char: 'r', summary: 'This option specifies the rules to be used.' }),
+    format: Flags.string({
+      char: 'f',
+      summary: 'This option specifies the output format for the console.',
+      default: 'json'
+    })
   }
 
   public async run(): Promise<void> {
@@ -32,8 +38,10 @@ export default class Validate extends Command {
     const translator = initTranslator(flags.path)
     const validator = await initValidator(translator, parseFlags(flags.rules))
 
-    const report = JSON.stringify(validator.run(), null, 2)
+    const report = validator.run()
 
-    this.log(report)
+    if (flags.format === 'json') {
+      this.log(format.json(report))
+    }
   }
 }

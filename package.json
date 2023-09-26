@@ -99,6 +99,7 @@
     "registry": "https://artifactory.tools.devrtb.com/artifactory/api/npm/npm-local/"
   },
   "oclif": {
+    "bin": "mimir",
     "commands": "./build/commands"
   }
 }
