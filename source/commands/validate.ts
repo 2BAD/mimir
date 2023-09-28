@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable jsdoc/require-jsdoc */
 import { Command, Flags } from '@oclif/core'
-import * as format from '~/formatters/index.js'
+import * as format from '~/formatters/format.js'
 import { initTranslator } from '~/translator.js'
 import { initValidator } from '~/validator.js'
 
