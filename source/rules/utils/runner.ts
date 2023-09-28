@@ -25,26 +25,26 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
   debug(`initializing rule runner with following rules '%o'`, ruleIds)
 
   const rules = await loadRules(ruleIds)
-  const rulesMap = new Map<HookType, LifeCycleHooks[]>()
+  const hooksMap = new Map<HookType, LifeCycleHooks[]>()
   const problems: Problem[] = []
 
   // Initialize rules and store them in a map with hook as key
   Object.values(rules).forEach((rule) => {
     rule.meta.hooks?.forEach((hook) => {
-      if (!rulesMap.has(hook)) {
-        rulesMap.set(hook, [])
+      if (!hooksMap.has(hook)) {
+        hooksMap.set(hook, [])
       }
       const lc = LifeCycleHooks.parse(rule.create())
-      rulesMap.get(hook)?.push(lc)
+      hooksMap.get(hook)?.push(lc)
     })
   })
 
   for (const hook of HookType.options) {
-    debug(`rules initialized for hook %o: %o`, hook, rulesMap.get(hook)?.length ?? 0)
+    debug(`rules initialized for hook %o: %o`, hook, hooksMap.get(hook)?.length ?? 0)
   }
 
   const trigger: RunnerTriggerFn = (hook: HookType, params: ContextParams): void => {
-    const triggered = rulesMap.get(hook)
+    const triggered = hooksMap.get(hook)
     if (triggered) {
       debug(`triggered lifecycle hook: %o`, hook)
       triggered.forEach((rule) => {
