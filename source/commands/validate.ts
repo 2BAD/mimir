@@ -43,5 +43,8 @@ export default class Validate extends Command {
     if (flags.format === 'json') {
       this.log(format.json(report))
     }
+    if (flags.format === 'compact') {
+      this.log(format.compact(report, flags.path))
+    }
   }
 }
