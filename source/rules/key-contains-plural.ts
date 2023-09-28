@@ -1,5 +1,6 @@
 import { type LifeCycleHooks, type OnKeyHook, type Rule } from '~/rules/utils/types.js'
 
+const type = 'notice'
 const MESSAGE_ID = 'key-contains-plural'
 const messages = {
   [MESSAGE_ID]: 'Translation key contains "plural" keyword.'
@@ -15,6 +16,7 @@ const create = (): LifeCycleHooks => {
       report({
         filePath,
         key,
+        type,
         messageId: MESSAGE_ID
       })
     }
@@ -28,10 +30,10 @@ const create = (): LifeCycleHooks => {
 export const rule: Rule = {
   create,
   meta: {
-    type: 'notice',
+    type,
+    messages,
     docs: {
       description: 'Notify if translation key contains "plural" keyword.'
-    },
-    messages
+    }
   }
 }

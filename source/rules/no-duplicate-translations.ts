@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { type LifeCycleHooks, type OnTranslationsHook, type Rule } from '~/rules/utils/types.js'
 
+const type = 'notice'
 const MESSAGE_ID = 'no-duplicate-translations'
 const messages = {
   [MESSAGE_ID]: 'Key has multiple identical translations.'
@@ -26,6 +27,7 @@ const create = (): LifeCycleHooks => {
       report({
         filePath,
         key,
+        type,
         messageId: MESSAGE_ID,
         message: `Following locales have the same translation: ${locales.toString()}`
       })
@@ -40,10 +42,10 @@ const create = (): LifeCycleHooks => {
 export const rule: Rule = {
   create,
   meta: {
-    type: 'notice',
+    type,
+    messages,
     docs: {
       description: 'Notify if the translations for a specific key are identical.'
-    },
-    messages
+    }
   }
 }

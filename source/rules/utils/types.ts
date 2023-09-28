@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { TranslationsMap } from '~/types.js'
 
 export const Problem = z.object({
+  type: z.string().optional(),
   message: z.string().optional(),
   messageId: z.string().optional(),
   filePath: z.string().optional(),

@@ -1,5 +1,6 @@
 import { type LifeCycleHooks, type OnValueHook, type Rule } from '~/rules/utils/types.js'
 
+const type = 'notice'
 const MESSAGE_ID = 'value-contains-apostrophe'
 const messages = {
   [MESSAGE_ID]: 'Translation value contains apostrophes.'
@@ -29,10 +30,10 @@ const create = (): LifeCycleHooks => {
 export const rule: Rule = {
   create,
   meta: {
-    type: 'notice',
+    type,
+    messages,
     docs: {
       description: 'Notify if translation string contains apostrophe.'
-    },
-    messages
+    }
   }
 }
