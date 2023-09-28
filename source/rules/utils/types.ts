@@ -110,7 +110,9 @@ export const Rule = z.object({
       description: z.string(),
       url: z.string().optional()
     }),
-    messages: z.record(z.string()),
+    messages: z.record(z.string()).refine((m) => Object.values(m).length >= 1, {
+      message: 'Rule meta should contain at least one message'
+    }),
     hooks: z.array(HookType).optional()
   }),
   create: RuleInitFn

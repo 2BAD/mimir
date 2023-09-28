@@ -26,17 +26,24 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
 
   const rules = await loadRules(ruleIds)
   const hooksMap = new Map<HookType, LifeCycleHooks[]>()
+  const messagesMap = new Map<string, string>()
   const problems: Problem[] = []
 
   // Initialize rules and store them in a map with hook as key
   Object.values(rules).forEach((rule) => {
-    rule.meta.hooks?.forEach((hook) => {
+    const { hooks, messages } = rule.meta
+
+    for (const [id, message] of Object.entries(messages)) {
+      messagesMap.set(id, message)
+    }
+
+    for (const hook of hooks ?? []) {
       if (!hooksMap.has(hook)) {
         hooksMap.set(hook, [])
       }
       const lc = LifeCycleHooks.parse(rule.create())
       hooksMap.get(hook)?.push(lc)
-    })
+    }
   })
 
   for (const hook of HookType.options) {
@@ -67,13 +74,20 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
     }
   }
 
-  const createContext: RunnerCreateContextFn = (params: ContextParams): Context => {
-    debug(`creating context using parameters: %o`, params)
+  const createContext: RunnerCreateContextFn = (problem: ContextParams): Context => {
+    debug(`creating context using parameters: %o`, problem)
+
     return {
-      ...params,
+      ...problem,
       report: (problem: Problem): void => {
         debug(`rule reported a problem: %o`, problem)
-        problems.push(problem)
+        const message =
+          problem.messageId !== undefined
+            ? messagesMap.get(problem.messageId) ??
+              `ERROR: Unable to find message matching messageId: ${problem.messageId}`
+            : 'ERROR: Rule meta should contain at least one message'
+
+        problems.push({ message, ...problem })
       }
     }
   }

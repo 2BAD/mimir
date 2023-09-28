@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { type LifeCycleHooks, type OnTranslationsHook, type Rule } from '~/rules/utils/types.js'
 
 const MESSAGE_ID = 'no-duplicate-translations'
@@ -5,9 +6,7 @@ const messages = {
   [MESSAGE_ID]: 'Key has multiple identical translations.'
 }
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 const create = (): LifeCycleHooks => {
-  // eslint-disable-next-line jsdoc/require-jsdoc
   const onTranslations: OnTranslationsHook = ({ report, filePath, key, translations }) => {
     const values = Object.values(translations)
     const fm = values.reduce((m, v) => {
