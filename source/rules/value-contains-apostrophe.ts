@@ -17,6 +17,7 @@ const create = (): LifeCycleHooks => {
         filePath,
         key,
         value,
+        type,
         messageId: MESSAGE_ID
       })
     }
