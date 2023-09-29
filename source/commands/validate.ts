@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable jsdoc/require-jsdoc */
 import { Command, Flags } from '@oclif/core'
+import { readFileSync } from 'node:fs'
 import * as format from '~/formatters/format.js'
 import { initTranslator } from '~/translator.js'
 import { initValidator } from '~/validator.js'
@@ -14,6 +15,7 @@ export default class Validate extends Command {
   static override flags = {
     path: Flags.string({ char: 'p', summary: 'path to translation folder', default: process.cwd() }),
     rules: Flags.string({ char: 'r', summary: 'This option specifies the rules to be used.' }),
+    keys: Flags.string({ char: 'k', summary: 'This option specifies the keys to be scanned.' }),
     format: Flags.string({
       char: 'f',
       summary: 'This option specifies the output format for the console.',
@@ -35,10 +37,15 @@ export default class Validate extends Command {
       return rules
     }
 
+    let keys: string[] = []
+    if (flags.keys !== undefined) {
+      keys = JSON.parse(readFileSync(flags.keys, { encoding: 'utf-8' })) as string[]
+    }
+
     const translator = initTranslator(flags.path)
     const validator = await initValidator(translator, parseFlags(flags.rules))
 
-    const report = validator.run()
+    const report = validator.run(keys)
 
     switch (flags.format) {
       case 'json':
