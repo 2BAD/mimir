@@ -40,11 +40,18 @@ export default class Validate extends Command {
 
     const report = validator.run()
 
-    if (flags.format === 'json') {
-      this.log(format.json(report))
-    }
-    if (flags.format === 'compact') {
-      this.log(format.compact(report, flags.path))
+    switch (flags.format) {
+      case 'json':
+        this.log(format.json(report))
+        break
+      case 'compact':
+        this.log(format.compact(report, flags.path))
+        break
+      case 'stylish':
+        this.log(format.stylish(report, flags.path))
+        break
+      default:
+        break
     }
   }
 }
