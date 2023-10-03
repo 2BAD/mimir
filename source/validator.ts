@@ -17,13 +17,26 @@ export const initValidator = async (translator: Translator, ruleIds?: string[]):
    * Run the validation process.
    *
    * @param [keys] - Optional array of translation keys to run the validation on. If not provided, it runs on all translation keys.
+   * @param keysToIgnore
    * @returns An array of problems encountered during the validation process.
    */
-  const run = (keys?: string[]): Problem[] => {
+  const run = (keys?: string[], keysToIgnore?: string[]): Problem[] => {
     if (keys === undefined || keys?.length === 0) {
       keys = translator.getKeys()
     }
 
+    if (keysToIgnore !== undefined && keysToIgnore?.length !== 0) {
+      keys = keys.filter((k) => {
+        for (const ignoreString of keysToIgnore) {
+          if (k.startsWith(ignoreString)) {
+            return false
+          }
+        }
+        return true
+      })
+    }
+
+    debug('number of keys to validate: %o', keys.length)
     for (const key of keys) {
       const filePath = translator.findTranslationsFolder(key)
 

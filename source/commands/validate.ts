@@ -16,6 +16,7 @@ export default class Validate extends Command {
     path: Flags.string({ char: 'p', summary: 'path to translation folder', default: process.cwd() }),
     rules: Flags.string({ char: 'r', summary: 'This option specifies the rules to be used.' }),
     keys: Flags.string({ char: 'k', summary: 'This option specifies the keys to be scanned.' }),
+    ignoreKeys: Flags.string({ char: 'i', summary: 'This option specifies the keys to be ignored.' }),
     format: Flags.string({
       char: 'f',
       summary: 'This option specifies the output format for the console.',
@@ -42,10 +43,15 @@ export default class Validate extends Command {
       keys = JSON.parse(readFileSync(flags.keys, { encoding: 'utf-8' })) as string[]
     }
 
+    let keysToIgnore: string[] = []
+    if (flags.ignoreKeys !== undefined) {
+      keysToIgnore = JSON.parse(readFileSync(flags.ignoreKeys, { encoding: 'utf-8' })) as string[]
+    }
+
     const translator = initTranslator(flags.path)
     const validator = await initValidator(translator, parseFlags(flags.rules))
 
-    const report = validator.run(keys)
+    const report = validator.run(keys, keysToIgnore)
 
     switch (flags.format) {
       case 'json':
