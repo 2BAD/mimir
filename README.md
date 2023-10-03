@@ -8,9 +8,9 @@ Translation and validation toolkit.
 # Usage
 
 ```sh-session
-$ npm install -g @mirohq-internal/mimir
+$ npm install -g @2bad/mimir
 $ mimir --version
-@mirohq-internal/mimir/1.0.0 wsl-x64 node-v20.7.0
+@2bad/mimir/1.0.0 wsl-x64 node-v20.7.0
 $ mimir validate --help
 Validate translation files
 
