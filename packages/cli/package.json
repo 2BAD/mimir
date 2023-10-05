@@ -1,0 +1,57 @@
+{
+  "name": "@2bad/mimir-cli",
+  "version": "0.0.0",
+  "description": "Mimir CLI",
+  "keywords": [],
+  "homepage": "https://github.com/2bad/mimir#readme",
+  "bugs": {
+    "url": "https://github.com/2bad/mimir/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2bad/mimir.git"
+  },
+  "license": "MIT",
+  "author": "Oleh Zhmaiev (https://github.com/grasword)",
+  "type": "module",
+  "exports": "./build/index.js",
+  "typings": "./build/index.d.ts",
+  "bin": {
+    "mimir": "bin/run.mjs"
+  },
+  "files": [
+    "bin",
+    "build"
+  ],
+  "scripts": {
+    "prebuild": "rimraf build",
+    "build": "run-p build:*",
+    "postbuild": "run-s fix:alias",
+    "build:swc": "swc ./source -d ./build",
+    "build:types": "tsc --project tsconfig.build.json",
+    "check": "run-p check:*",
+    "check:code": "eslint . --ext .ts",
+    "check:format": "prettier --check 'source/**/*.ts'",
+    "fix": "run-s fix:code fix:format",
+    "fix:alias": "tsc-alias -p tsconfig.build.json",
+    "fix:code": "run-s 'lint -- --fix'",
+    "fix:format": "prettier --write 'source/**/*.ts'",
+    "prepublishOnly": "run-s build",
+    "test": "vitest run",
+    "test:integration": "vitest run integration --coverage",
+    "test:unit": "vitest run unit --coverage",
+    "preversion": "run-s check test build"
+  },
+  "dependencies": {
+    "@2bad/mimir-translator": "1.0.0",
+    "@oclif/core": "3.0.0-beta.25",
+    "@oclif/plugin-help": "5.2.20",
+    "@oclif/plugin-plugins": "3.8.4",
+    "chalk": "5.3.0",
+    "easy-table": "1.2.0"
+  },
+  "oclif": {
+    "bin": "mimir",
+    "commands": "./build/commands"
+  }
+}

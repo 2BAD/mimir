@@ -23,13 +23,13 @@ const create = (): LifeCycleHooks => {
       .filter(([_, t]) => fm.get(t) > 1)
       .map((e) => e[0])
 
-    if (locales.length > 0) {
+    if (locales.length > 0 && locales.includes('en')) {
       report({
         filePath,
         key,
         type,
         messageId: MESSAGE_ID,
-        message: `Following locales have the same translation: ${locales.toString()}`
+        message: `Following locales have the same translation: ${locales.toString()} - ${translations.en}`
       })
     }
   }

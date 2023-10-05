@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable jsdoc/require-jsdoc */
+import { initTranslator } from '@2bad/mimir-translator'
+import { initValidator } from '@2bad/mimir-validator'
 import { Command, Flags } from '@oclif/core'
 import { readFileSync } from 'node:fs'
 import * as format from '~/formatters/format.js'
-import { initTranslator } from '~/translator.js'
-import { initValidator } from '~/validator.js'
 
 // eslint-disable-next-line import/no-default-export
 export default class Validate extends Command {

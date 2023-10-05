@@ -14,34 +14,11 @@
   "license": "MIT",
   "author": "Oleh Zhmaiev (https://github.com/grasword)",
   "type": "module",
-  "exports": "./build/index.js",
-  "typings": "./build/index.d.ts",
-  "bin": {
-    "mimir": "bin/run.mjs"
-  },
-  "files": [
-    "bin",
-    "build"
+  "workspaces": [
+    "packages/translator",
+    "packages/validator",
+    "packages/cli"
   ],
-  "scripts": {
-    "prebuild": "rimraf build",
-    "build": "run-p build:*",
-    "postbuild": "run-s fix:alias",
-    "build:swc": "swc ./source -d ./build",
-    "build:types": "tsc --project tsconfig.build.json",
-    "check": "run-p check:*",
-    "check:code": "eslint . --ext .ts",
-    "check:format": "prettier --check 'source/**/*.ts'",
-    "fix": "run-s fix:code fix:format",
-    "fix:alias": "tsc-alias -p tsconfig.build.json",
-    "fix:code": "run-s 'lint -- --fix'",
-    "fix:format": "prettier --write 'source/**/*.ts'",
-    "prepublishOnly": "run-s build",
-    "preversion": "run-s check test build",
-    "test": "vitest run",
-    "test:integration": "vitest run integration --coverage",
-    "test:unit": "vitest run unit --coverage"
-  },
   "prettier": {
     "printWidth": 120,
     "semi": false,
@@ -49,14 +26,7 @@
     "trailingComma": "none"
   },
   "dependencies": {
-    "@oclif/core": "3.0.0-beta.16",
-    "@oclif/plugin-help": "5.2.19",
-    "@oclif/plugin-plugins": "3.8.0",
-    "chalk": "5.3.0",
-    "debug": "4.3.4",
-    "easy-table": "1.2.0",
-    "fast-glob": "3.3.1",
-    "zod": "3.22.2"
+    "debug": "4.3.4"
   },
   "devDependencies": {
     "@2bad/tsconfig": "2.0.1",
@@ -81,10 +51,8 @@
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-vitest": "0.3.1",
     "npm-run-all": "4.1.5",
-    "oclif": "3.17.1",
     "prettier": "3.0.3",
     "rimraf": "5.0.1",
-    "ts-node": "10.9.1",
     "tsc-alias": "1.8.8",
     "typescript": "5.2.2",
     "vite-tsconfig-paths": "4.2.1",
@@ -95,12 +63,5 @@
   },
   "volta": {
     "node": "20.7.0"
-  },
-  "publishConfig": {
-    "registry": "https://artifactory.tools.devrtb.com/artifactory/api/npm/npm-local/"
-  },
-  "oclif": {
-    "bin": "mimir",
-    "commands": "./build/commands"
   }
 }

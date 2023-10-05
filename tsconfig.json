@@ -1,13 +1,18 @@
 {
   "extends": "@2bad/tsconfig",
   "compilerOptions": {
-    "outDir": "build",
-    "baseUrl": "source",
     "declaration": true,
     "emitDeclarationOnly": true,
     "types": ["vitest/globals"],
     "paths": {
-      "~/*": ["./*"]
+      "~/*": ["./*"],
+      "@2bad/mimir-cli/*": ["./packages/cli/*"],
+      "@2bad/mimir-translator/*": ["./packages/translator/*"]
     }
-  }
+  },
+  "references": [
+    { "path": "./packages/cli/tsconfig.json" },
+    { "path": "./packages/translator/tsconfig.json" },
+    { "path": "./packages/validator/tsconfig.json" }
+  ]
 }
