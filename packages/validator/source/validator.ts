@@ -18,7 +18,7 @@ export const initValidator = async (translator: Translator, ruleIds?: string[]):
    * Run the validation process.
    *
    * @param [keys] - Optional array of translation keys to run the validation on. If not provided, it runs on all translation keys.
-   * @param keysToIgnore
+   * @param [keysToIgnore] - Optional array of keys to ignore.
    * @returns An array of problems encountered during the validation process.
    */
   const run = (keys?: string[], keysToIgnore?: string[]): Problem[] => {

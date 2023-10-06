@@ -64,7 +64,8 @@ export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runn
             const hookFn = OnTranslationsHook.parse(rule[hook])
             const context = OnTranslationsContext.and(ReportContext).parse(createContext(params))
             hookFn(context)
-          } else if (hook === 'onValue') {
+            // } else if (hook === 'onValue') {
+          } else {
             const hookFn = OnValueHook.parse(rule[hook])
             const context = OnValueContext.and(ReportContext).parse(createContext(params))
             hookFn(context)

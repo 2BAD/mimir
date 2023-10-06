@@ -16,7 +16,7 @@ export const stylish = (report: Problem[], workingDir: string): string => {
   const problemsMap = new Map<string, Problem[]>()
   workingDir += workingDir.endsWith('/') ? '' : '/'
 
-  for (const problem of report ?? []) {
+  for (const problem of report) {
     if (problem.message !== undefined) {
       if (!problemsMap.has(problem.message)) {
         problemsMap.set(problem.message, [])
