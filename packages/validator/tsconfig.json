@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "build",
     "baseUrl": "source",
+    "rootDir": "source",
     "composite": true
   }
 }
