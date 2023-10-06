@@ -18,7 +18,7 @@ const { globSync } = glob
  * @returns An array of found translation file paths.
  */
 export const findTranslationFiles = (searchPath: string, locales: Locale[] = []): string[] => {
-  const variants = locales?.length !== 0 ? (locales.length === 1 ? locales[0] : `{${locales?.join(',')}}`) : '*'
+  const variants = locales.length !== 0 ? (locales.length === 1 ? locales[0] : `{${locales.join(',')}}`) : '*'
   const pattern = path.join(searchPath, `**/translation.${variants}.json`)
   debug(`looking for translation files in '%s' for locales: %o`, pattern, locales)
   return globSync(['!**/node_modules/**', pattern])

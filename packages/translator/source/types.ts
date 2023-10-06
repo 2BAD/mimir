@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { type Problem } from '~/rules/utils/types.js'
 
 export const LocaleValues = {
   English: 'en',
@@ -41,10 +40,6 @@ export type Translator = {
   getTranslations: (key: string) => TranslationsMap | null
   findLocaleByText: (text: string) => string | null
   findTranslationsFolder: (key: string) => string | null
-}
-
-export type Validator = {
-  run: (keys?: string[], keysToIgnore?: string[]) => Problem[]
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc

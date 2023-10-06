@@ -37,7 +37,7 @@ export const initTranslator = (path: string, locales: Locale[] = []): Translator
   const getText = (locale: Locale, key: string): string | null => {
     debug('requesting translation text for key: %o locale: %o', key, locale)
     const e = cache.get(key, locale)
-    return e?.translations?.[locale] ?? null
+    return e?.translations[locale] ?? null
   }
 
   /**

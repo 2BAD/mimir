@@ -1,7 +1,7 @@
 {
   "name": "@2bad/mimir-translator",
   "version": "1.0.0",
-  "description": "Translation toolkit.",
+  "description": "Toolkit for managing json translation files",
   "keywords": [],
   "homepage": "https://github.com/2bad/mimir#readme",
   "bugs": {
@@ -33,15 +33,15 @@
     "fix:code": "run-s 'lint -- --fix'",
     "fix:format": "prettier --write 'source/**/*.ts'",
     "prepublishOnly": "run-s build",
-    "preversion": "run-s check test build",
     "test": "vitest run",
     "test:integration": "vitest run integration --coverage",
-    "test:unit": "vitest run unit --coverage"
+    "test:unit": "vitest run unit --coverage",
+    "preversion": "run-s check test build"
   },
   "dependencies": {
     "debug": "4.3.4",
     "fast-glob": "3.3.1",
-    "zod": "3.22.2"
+    "zod": "3.22.4"
   },
   "engines": {
     "node": ">=18"
