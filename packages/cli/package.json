@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@2bad/mimir-translator": "1.0.0",
+    "@2bad/mimir-validator": "1.0.0",
     "@oclif/core": "3.0.0-beta.25",
     "@oclif/plugin-help": "5.2.20",
     "@oclif/plugin-plugins": "3.8.4",

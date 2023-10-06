@@ -1,6 +1,6 @@
+import { type Problem } from '@2bad/mimir-validator'
 import chalk from 'chalk'
 import Table from 'easy-table'
-import { type Problem } from '~/rules/utils/types.js'
 
 /**
  * Formats the report in a stylish manner.

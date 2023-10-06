@@ -1,4 +1,4 @@
-import { type Problem } from '~/rules/utils/types.js'
+import { type Problem } from '@2bad/mimir-validator'
 
 /**
  * Outputs JSON-serialized results.
