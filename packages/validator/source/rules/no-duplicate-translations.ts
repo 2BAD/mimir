@@ -12,15 +12,15 @@ const create = (): LifeCycleHooks => {
     const values = Object.values(translations)
     const fm = values.reduce((m, v) => {
       if (m.has(v)) {
-        m.set(v, m.get(v) + 1)
+        m.set(v, m.get(v) ?? 0 + 1)
       } else {
         m.set(v, 1)
       }
       return m
-    }, new Map())
+    }, new Map<string, number>())
 
     const locales: string[] = Object.entries(translations)
-      .filter(([_, t]) => fm.get(t) > 1)
+      .filter(([_, t]) => (fm.get(t) ?? 0) > 1)
       .map((e) => e[0])
 
     if (locales.length > 0 && locales.includes('en')) {
