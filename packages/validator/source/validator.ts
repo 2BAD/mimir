@@ -1,6 +1,7 @@
+import { type Translator } from '@2bad/mimir-translator'
 import { initRunner } from '~/rules/utils/runner.js'
 import { type Problem } from '~/rules/utils/types.js'
-import { type Translator, type Validator } from '~/types.js'
+import { type Validator } from '~/types.js'
 const debug = (await import('debug')).default('validator')
 
 /**
@@ -21,11 +22,11 @@ export const initValidator = async (translator: Translator, ruleIds?: string[]):
    * @returns An array of problems encountered during the validation process.
    */
   const run = (keys?: string[], keysToIgnore?: string[]): Problem[] => {
-    if (keys === undefined || keys?.length === 0) {
+    if (keys === undefined || keys.length === 0) {
       keys = translator.getKeys()
     }
 
-    if (keysToIgnore !== undefined && keysToIgnore?.length !== 0) {
+    if (keysToIgnore !== undefined && keysToIgnore.length !== 0) {
       keys = keys.filter((k) => {
         for (const ignoreString of keysToIgnore) {
           if (k.startsWith(ignoreString)) {

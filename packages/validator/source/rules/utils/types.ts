@@ -1,5 +1,5 @@
+import { TranslationsMap } from '@2bad/mimir-translator'
 import { z } from 'zod'
-import { TranslationsMap } from '~/types.js'
 
 export const Problem = z.object({
   type: z.string().optional(),
