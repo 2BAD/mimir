@@ -6,8 +6,10 @@ parserOptions:
 
 settings:
   import/resolver:
-    typescript: true
-    node: true
+    typescript:
+      project:
+        - './tsconfig.json'
+        - './packages/*/tsconfig.json'
 
 ignorePatterns:
   - 'build'
