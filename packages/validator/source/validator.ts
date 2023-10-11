@@ -27,6 +27,7 @@ export const initValidator = async (translator: Translator, ruleIds?: string[]):
     }
 
     if (keysToIgnore !== undefined && keysToIgnore.length !== 0) {
+      debug('number of keys to ignore: %o', keysToIgnore.length)
       keys = keys.filter((k) => {
         for (const ignoreString of keysToIgnore) {
           if (k.startsWith(ignoreString)) {
