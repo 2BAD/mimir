@@ -12,7 +12,7 @@ const create = (): LifeCycleHooks => {
     const values = Object.values(translations)
     const fm = values.reduce((m, v) => {
       if (m.has(v)) {
-        m.set(v, m.get(v) ?? 0 + 1)
+        m.set(v, (m.get(v) ?? 0) + 1)
       } else {
         m.set(v, 1)
       }
