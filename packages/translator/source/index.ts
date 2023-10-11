@@ -1,2 +1,2 @@
 export { initTranslator } from '~/translator.js'
-export { TranslationsMap, type Translator } from '~/types.js'
+export { TranslationsMap, type Locale, type Translator } from '~/types.js'

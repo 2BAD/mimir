@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable jsdoc/require-jsdoc */
-import { initTranslator } from '@2bad/mimir-translator'
+import { initTranslator, type Locale } from '@2bad/mimir-translator'
 import { initValidator } from '@2bad/mimir-validator'
 import { Command, Flags } from '@oclif/core'
 import { readFileSync } from 'node:fs'
@@ -14,6 +14,7 @@ export default class Validate extends Command {
 
   static override flags = {
     path: Flags.string({ char: 'p', summary: 'path to translation folder', default: process.cwd() }),
+    locales: Flags.string({ char: 'l', summary: 'This option specifies the locales to be used.' }),
     rules: Flags.string({ char: 'r', summary: 'This option specifies the rules to be used.' }),
     keys: Flags.string({ char: 'k', summary: 'This option specifies the keys to be scanned.' }),
     ignoreKeys: Flags.string({ char: 'i', summary: 'This option specifies the keys to be ignored.' }),
@@ -28,14 +29,14 @@ export default class Validate extends Command {
     const { flags } = await this.parse(Validate)
 
     const parseFlags = (input?: string): string[] | undefined => {
-      let rules
+      let arr
       if (input !== undefined) {
-        rules = input.split(', ')
-        if (rules.length === 1) {
-          rules = input.split(',')
+        arr = input.split(', ')
+        if (arr.length === 1) {
+          arr = input.split(',')
         }
       }
-      return rules
+      return arr
     }
 
     let keys: string[] = []
@@ -48,7 +49,7 @@ export default class Validate extends Command {
       keysToIgnore = JSON.parse(readFileSync(flags.ignoreKeys, { encoding: 'utf-8' })) as string[]
     }
 
-    const translator = initTranslator(flags.path)
+    const translator = initTranslator(flags.path, parseFlags(flags.locales) as Locale[])
     const validator = await initValidator(translator, parseFlags(flags.rules))
 
     const report = validator.run(keys, keysToIgnore)
