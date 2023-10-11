@@ -27,6 +27,7 @@ const create = (): LifeCycleHooks => {
       report({
         filePath,
         key,
+        value: translations.en,
         type,
         messageId: MESSAGE_ID,
         message: `Following locales have the same translation: ${locales.toString()} - ${translations.en}`
