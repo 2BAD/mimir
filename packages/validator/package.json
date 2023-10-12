@@ -1,6 +1,6 @@
 {
   "name": "@2bad/mimir-validator",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Toolkit for validating json translation files",
   "keywords": [],
   "homepage": "https://github.com/2bad/mimir#readme",
