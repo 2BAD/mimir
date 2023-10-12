@@ -37,9 +37,7 @@
     "fix:code": "run-s 'lint -- --fix'",
     "fix:format": "prettier --write 'source/**/*.ts'",
     "prepublishOnly": "run-s build",
-    "test": "vitest run",
-    "test:integration": "vitest run integration --coverage",
-    "test:unit": "vitest run unit --coverage",
+    "test": "vitest run --coverage",
     "preversion": "run-s check test build"
   },
   "dependencies": {
