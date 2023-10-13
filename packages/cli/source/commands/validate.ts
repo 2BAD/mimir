@@ -18,6 +18,10 @@ export default class Validate extends Command {
     rules: Flags.string({ char: 'r', summary: 'This option specifies the rules to be used.' }),
     keys: Flags.string({ char: 'k', summary: 'This option specifies the keys to be scanned.' }),
     ignoreKeys: Flags.string({ char: 'i', summary: 'This option specifies the keys to be ignored.' }),
+    outputFile: Flags.string({
+      char: 'o',
+      summary: 'This option specifies the name of the file where report should be saved'
+    }),
     format: Flags.string({
       char: 'f',
       summary: 'This option specifies the output format for the console.',
@@ -57,6 +61,10 @@ export default class Validate extends Command {
     switch (flags.format) {
       case 'json':
         this.log(format.json(report))
+        break
+      case 'xlsx':
+        format.xlsx(report, flags.outputFile)
+        this.log()
         break
       case 'compact':
         this.log(format.compact(report, flags.path))
