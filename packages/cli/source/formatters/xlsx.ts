@@ -3,10 +3,10 @@ import { utils, writeFile } from '@e965/xlsx'
 import { resolve } from 'node:path'
 
 /**
+ * Export given problem data as an XLSX file.
  *
- * @param data
- * @param report
- * @param filePath
+ * @param report - An array of problem objects.
+ * @param [filePath] - Optional file path for saving the XLSX file.
  */
 export const xlsx = (report: Problem[], filePath = './report.xlsx'): void => {
   const worksheet = utils.json_to_sheet(report)
