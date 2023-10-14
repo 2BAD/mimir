@@ -41,14 +41,16 @@ export const loadRules = async (rulesToLoad?: string[]): Promise<Record<string, 
   })
 
   const rulePromises = files
-    .filter((file) => file.isFile() && file.name.endsWith('.js'))
-    .filter((file) => {
-      const ruleId = path.basename(file.name, '.js')
-      return !rulesToLoad || rulesToLoad.includes(ruleId)
-    })
-    .map(async (file) => {
-      const ruleId = path.basename(file.name, '.js')
-      const rulePath = path.join(file.path, file.name)
+    .filter(
+      (file) =>
+        file.isFile() && (file.name.endsWith('.js') || (file.name.endsWith('.ts') && !file.name.includes('.test.')))
+    )
+    .map((file) => ({
+      ruleId: path.parse(file.name).name,
+      rulePath: path.join(file.path, file.name)
+    }))
+    .filter(({ ruleId }) => !rulesToLoad || rulesToLoad.includes(ruleId))
+    .map(async ({ ruleId, rulePath }) => {
       debug('rule found: %o', ruleId)
 
       return [ruleId, await loadRule(rulePath)]
