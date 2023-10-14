@@ -33,7 +33,7 @@ export const loadRule = async (modulePath: string): Promise<Rule> => {
  * @returns A promise that resolves to a map of rule names to their corresponding rule objects.
  */
 export const loadRules = async (rulesToLoad?: string[]): Promise<Record<string, Rule>> => {
-  const rulesDir = new URL('..', import.meta.url)
+  const rulesDir = new URL('rules', import.meta.url)
   debug('searching for rules in: %o', rulesDir.pathname)
 
   const files = await readdir(rulesDir, {

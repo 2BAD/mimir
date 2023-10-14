@@ -5,7 +5,7 @@ describe('loadRule', () => {
   it('should load a rule from a module', async () => {
     expect.assertions(3)
 
-    const rulesDir = new URL('..', import.meta.url)
+    const rulesDir = new URL('rules', import.meta.url)
     const modulePath = `${rulesDir.href}/key-contains-whitespace`
 
     const rule: Rule = await loadRule(modulePath)
@@ -30,7 +30,6 @@ describe('loadRules', () => {
     const rulesToLoad = ['key-contains-whitespace', 'key-contains-plural']
 
     const rulesMap = await loadRules(rulesToLoad)
-    console.log(rulesMap)
 
     expect(rulesMap).toBeDefined()
     expect(Object.keys(rulesMap)).toHaveLength(rulesToLoad.length)
