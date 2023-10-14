@@ -1,2 +1,2 @@
-export { Problem } from '~/rules/utils/types.js'
+export { Problem } from '~/types.js'
 export { initValidator } from '~/validator.js'

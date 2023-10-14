@@ -1,4 +1,4 @@
-import { type LifeCycleHooks, type OnValueHook, type Rule } from '~/rules/utils/types.js'
+import { type LifeCycleHooks, type OnValueHook, type Rule } from '~/types.js'
 
 const type = 'notice'
 const MESSAGE_ID = 'value-contains-apostrophe'

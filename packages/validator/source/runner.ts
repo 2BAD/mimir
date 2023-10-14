@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { loadRules } from '~/rules/utils/loader.js'
+import { loadRules } from '~/loader.js'
 import {
   HookType,
   LifeCycleHooks,
@@ -18,7 +18,7 @@ import {
   type RunnerGetProblemsFn,
   type RunnerInitFn,
   type RunnerTriggerFn
-} from '~/rules/utils/types.js'
+} from '~/types.js'
 const debug = (await import('debug')).default('runner')
 
 export const initRunner: RunnerInitFn = async (ruleIds?: string[]): Promise<Runner> => {

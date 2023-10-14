@@ -1,7 +1,7 @@
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { z } from 'zod'
-import { HookType, Module, Rule } from '~/rules/utils/types.js'
+import { HookType, Module, Rule } from '~/types.js'
 const debug = (await import('debug')).default('loader')
 
 /**

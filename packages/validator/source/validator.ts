@@ -1,7 +1,6 @@
 import { type Translator } from '@2bad/mimir-translator'
-import { initRunner } from '~/rules/utils/runner.js'
-import { type Problem } from '~/rules/utils/types.js'
-import { type Validator } from '~/types.js'
+import { initRunner } from '~/runner.js'
+import { type Problem, type Validator } from '~/types.js'
 const debug = (await import('debug')).default('validator')
 
 /**

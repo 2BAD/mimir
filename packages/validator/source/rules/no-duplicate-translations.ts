@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { type LifeCycleHooks, type OnTranslationsHook, type Rule } from '~/rules/utils/types.js'
+import { type LifeCycleHooks, type OnTranslationsHook, type Rule } from '~/types.js'
 
 const type = 'notice'
 const MESSAGE_ID = 'no-duplicate-translations'

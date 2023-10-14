@@ -1,5 +1,5 @@
-import { loadRule, loadRules } from '~/rules/utils/loader.js'
-import { type Rule } from '~/rules/utils/types.js'
+import { loadRule, loadRules } from '~/loader.js'
+import { type Rule } from '~/types.js'
 
 describe('loadRule', () => {
   it('should load a rule from a module', async () => {
