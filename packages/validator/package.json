@@ -37,7 +37,7 @@
     "preversion": "run-s check test build"
   },
   "dependencies": {
-    "@2bad/mimir-translator": "0.0.0",
+    "@2bad/mimir-translator": "*",
     "debug": "4.3.4",
     "zod": "3.22.4"
   },

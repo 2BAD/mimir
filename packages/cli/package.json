@@ -41,8 +41,8 @@
     "preversion": "run-s check test build"
   },
   "dependencies": {
-    "@2bad/mimir-translator": "0.0.0",
-    "@2bad/mimir-validator": "0.0.0",
+    "@2bad/mimir-translator": "*",
+    "@2bad/mimir-validator": "*",
     "@e965/xlsx": "0.20.0",
     "@oclif/core": "3.2.1",
     "@oclif/plugin-help": "6.0.2",
