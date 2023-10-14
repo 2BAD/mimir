@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["build", "**/*.test.ts", "vitest.config.ts"],
+  "exclude": ["build", "source/rules", "**/*.test.ts", "vitest.config.ts"],
   "tsc-alias": {
     "verbose": true,
     "resolveFullPaths": true
