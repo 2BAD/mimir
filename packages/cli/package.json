@@ -45,7 +45,7 @@
     "@2bad/mimir-validator": "*",
     "@e965/xlsx": "0.20.0",
     "@oclif/core": "3.2.1",
-    "@oclif/plugin-help": "6.0.2",
+    "@oclif/plugin-help": "6.0.3",
     "@oclif/plugin-plugins": "3.9.1",
     "chalk": "5.3.0",
     "easy-table": "1.2.0"
