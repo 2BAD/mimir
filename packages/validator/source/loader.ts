@@ -36,14 +36,13 @@ export const loadRules = async (rulesToLoad?: string[]): Promise<Record<string, 
   const rulesDir = new URL('rules', import.meta.url)
   debug('searching for rules in: %o', rulesDir.pathname)
 
-  const files = await readdir(rulesDir, {
+  const dirent = await readdir(rulesDir, {
     withFileTypes: true
   })
 
-  const rulePromises = files
+  const rulePromises = dirent
     .filter(
-      (file) =>
-        file.isFile() && (file.name.endsWith('.js') || (file.name.endsWith('.ts') && !file.name.includes('.test.')))
+      (ent) => ent.isFile() && (ent.name.endsWith('.js') || (ent.name.endsWith('.ts') && !ent.name.includes('.test.')))
     )
     .map((file) => ({
       ruleId: path.parse(file.name).name,
