@@ -37,7 +37,7 @@ FLAGS
   -k, --keys=<value>        This option specifies the keys to be scanned.
   -l, --locales=<value>     This option specifies the locales to be used.
   -o, --outputFile=<value>  This option specifies the name of the file where report should be saved
-  -p, --path=<value>        [default: /Users/oleh.zhmaiev/dev/mimir] path to translation folder
+  -p, --path=<value>        [default: process.cwd()] path to translation folder
   -r, --rules=<value>       This option specifies the rules to be used.
 
 DESCRIPTION
