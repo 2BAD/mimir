@@ -43,7 +43,6 @@
   "dependencies": {
     "@2bad/mimir-translator": "*",
     "@2bad/mimir-validator": "*",
-    "@e965/xlsx": "0.20.0",
     "@oclif/core": "3.6.0",
     "@oclif/plugin-help": "6.0.4",
     "@oclif/plugin-plugins": "3.9.3",

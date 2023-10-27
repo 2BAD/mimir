@@ -62,10 +62,6 @@ export default class Validate extends Command {
       case 'json':
         this.log(format.json(report))
         break
-      case 'xlsx':
-        format.xlsx(report, flags.outputFile)
-        this.log()
-        break
       case 'compact':
         this.log(format.compact(report, flags.path))
         break

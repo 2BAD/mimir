@@ -2,4 +2,3 @@
 export { compact } from '~/formatters/compact.js'
 export { json } from '~/formatters/json.js'
 export { stylish } from '~/formatters/stylish.js'
-export { xlsx } from '~/formatters/xlsx.js'
