@@ -29,12 +29,16 @@ Validate translation files
 
 ```
 USAGE
-  $ mimir validate [-p <value>] [-r <value>] [-f <value>]
+  $ mimir validate [-p <value>] [-l <value>] [-r <value>] [-k <value>] [-i <value>] [-o <value>] [-f <value>]
 
 FLAGS
-  -f, --format=<value>  [default: json] This option specifies the output format for the console.
-  -p, --path=<value>    [default: /home/projects/miro/mimir] path to translation folder
-  -r, --rules=<value>   This option specifies the rules to be used.
+  -f, --format=<value>      [default: json] This option specifies the output format for the console.
+  -i, --ignoreKeys=<value>  This option specifies the keys to be ignored.
+  -k, --keys=<value>        This option specifies the keys to be scanned.
+  -l, --locales=<value>     This option specifies the locales to be used.
+  -o, --outputFile=<value>  This option specifies the name of the file where report should be saved
+  -p, --path=<value>        [default: /Users/oleh.zhmaiev/dev/mimir] path to translation folder
+  -r, --rules=<value>       This option specifies the rules to be used.
 
 DESCRIPTION
   Validate translation files
