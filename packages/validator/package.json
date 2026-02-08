@@ -38,13 +38,13 @@
   },
   "dependencies": {
     "@2bad/mimir-translator": "*",
-    "debug": "4.3.4",
-    "zod": "3.22.4"
+    "debug": "4.4.3",
+    "zod": "3.25.76"
   },
   "engines": {
     "node": ">=18"
   },
   "volta": {
-    "node": "20.9.0"
+    "node": "20.20.0"
   }
 }
